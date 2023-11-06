@@ -1,29 +1,16 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beauty Salon</title>
-    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
-</head>
-<body>
-    <header>
-        <div class="logo">
-            <img src="{% static 'main/img/logo.png' %}" alt="Salon Logo">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#home">Главная</a></li>
-                <li><a href="{%url 'masters_list' %}">Мастера</a></li>
-                <li><a href="{%url 'services_list' %}">Услуги</a></li>
-                <li><a href="#products">Продукция</a></li>
-                <li><a href="#about">О нас</a></li>
-                <li><a href="#cabinet">Личный кабинет</a></li>
-            </ul>
-        </nav>
-    </header>
+{% extends 'main/layout.html' %}
 
+{% load static %}
+
+{% block title %}
+    Версаль
+{% endblock %}
+
+{% block css_link %}
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
     <section id="home">
         <div class="about">
             <h1>Добро пожаловать в Версаль</h1>
@@ -31,7 +18,7 @@
         </div>
         <div class="image-grid">
             <div class="image-container">
-                <a href="#services">
+                <a href="{%url 'services_list' %}">
                     <img src="{% static 'main/img/haircut.jpg' %}" alt="Service 1">
                     <div class="overlay">
                         <div class="caption">Стрижка</div>
@@ -39,7 +26,7 @@
                 </a>
             </div>
             <div class="image-container">
-                <a href="#services">
+                <a href="{%url 'services_list' %}">
                     <img src="{% static 'main/img/manicure.jpg' %}" alt="Service 1">
                     <div class="overlay">
                         <div class="caption">Маникюр</div>
@@ -47,7 +34,7 @@
                 </a>
             </div>
             <div class="image-container">
-                <a href="#services">
+                <a href="{%url 'services_list' %}">
                     <img src="{% static 'main/img/massage.jpg' %}" alt="Service 1">
                     <div class="overlay">
                         <div class="caption">Массаж</div>
@@ -55,7 +42,7 @@
                 </a>
             </div>
             <div class="image-container">
-                <a href="#services">
+                <a href="{%url 'services_list' %}">
                     <img src="{% static 'main/img/tinting.jpg' %}" alt="Service 1">
                     <div class="overlay">
                         <div class="caption">Брови</div>
@@ -63,7 +50,7 @@
                 </a>
             </div>
             <div class="image-container">
-                <a href="#services">
+                <a href="{%url 'services_list' %}">
                     <img src="{% static 'main/img/care.jpg' %}" alt="Service 1">
                     <div class="overlay">
                         <div class="caption">Эпиляция</div>
@@ -71,7 +58,7 @@
                 </a>
             </div>
             <div class="image-container">
-                <a href="#services">
+                <a href="{%url 'services_list' %}">
                     <img src="{% static 'main/img/reservation.jpg' %}" alt="Service 1">
                     <div class="overlay">
                         <div class="caption">Бронь</div>
@@ -88,17 +75,5 @@
             Добро пожаловать в наше святилище красоты и благополучия.</p>
     </section>
 
-    <footer>
-        <nav>
-            <ul>
-                <li><a href="#home">Главная</a></li>
-                <li><a href="#masters">Мастера</a></li>
-                <li><a href="#services">Услуги</a></li>
-                <li><a href="#products">Продукция</a></li>
-                <li><a href="#about">О нас</a></li>
-                <li><a href="#cabinet">Личный кабинет</a></li>
-            </ul>
-        </nav>
-    </footer>
-</body>
-</html>
+{% endblock %}
+

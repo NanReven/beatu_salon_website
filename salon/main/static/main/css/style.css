@@ -1,46 +1,5 @@
-/* styles.css */
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    background-color: #f9f9f9;
-    padding: 10px 0;
-    text-align: center;
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-nav li {
-    display: inline;
-    margin: 0 10px;
-}
-
-nav a {
-    text-decoration: none;
-}
-
 section {
     padding: 50px;
-}
-
-footer {
-    background-color: #f9f9f9;
-    text-align: center;
-    padding: 10px 0;
-}
-
-.logo img,
-.image-grid img {
-    max-width: 100%;
-    height: auto;
-    max-height: 200px; /* Adjust the value as needed */
 }
 
 .about {
@@ -65,6 +24,9 @@ footer {
 }
 
 .image-grid img {
+    max-width: 100%;
+    height: auto;
+    max-height: 200px;
     margin: 10px;
     cursor: pointer;
     flex: 0 0 calc(33.33% - 20px);
@@ -73,9 +35,8 @@ footer {
 
 .image-grid img:hover {
     transform: scale(1.2); /* Enlarge the image on hover */
+     opacity: 0.7; /* Adjust the opacity as needed */
 }
-
-/* Add this to your existing CSS file */
 
 .image-container {
     position: relative;
@@ -100,17 +61,6 @@ footer {
 .caption {
     color: #fff;
     font-size: 1.5em;
-}
-
-.image-grid img {
-    max-width: 100%;
-    max-height: 200px;
-    height: auto;
-    transition: opacity 0.3s;
-}
-
-.image-grid img:hover {
-    opacity: 0.7; /* Adjust the opacity as needed */
 }
 
 .image-container:hover .overlay {
