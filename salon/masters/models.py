@@ -10,12 +10,24 @@ class Masters(models.Model):
     full_description = models.TextField('Полная информация')
     rating = models.PositiveIntegerField('Рейтинг')
 
+    class Meta:
+        verbose_name = 'Мастер'
+        verbose_name_plural = 'Мастера'
+
 
 class Speciality(models.Model):
     speciality_id = models.BigAutoField(primary_key=True)
     speciality = models.CharField('Специальность', max_length=50)
 
+    class Meta:
+        verbose_name = 'Специальность'
+        verbose_name_plural = 'Специальности'
+
 
 class MasterSpeciality(models.Model):
     master_id = models.ForeignKey(Masters, on_delete=models.SET_NULL, null=True)
     speciality_id = models.ForeignKey(Speciality, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        verbose_name = 'Мастер-Специальность'
+        verbose_name_plural = 'Мастер-Специальность'
