@@ -1,0 +1,29 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+
+{% block title %} Services {% endblock %}
+
+{% block css_link %}
+    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    {% for category in all_categories %}
+
+    <div class="image-grid">
+        <div class="image-container">
+            <div class="category-card" onclick="window.location.href='{% url 'category_info' category.slug %}'">
+            <img src="{{category.photo.url}}" alt="{{category.category}}">
+            <div class="overlay">
+                    <div class="caption">{{category.category}}</div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    {% endfor %}
+
+{% endblock %}

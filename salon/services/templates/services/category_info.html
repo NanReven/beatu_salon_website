@@ -1,0 +1,25 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+
+{% block title %} all_services {% endblock %}
+
+{% block css_link %}
+    <link rel="stylesheet" href="{% static 'services/css/category_info.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="category-services">
+        <h1>{{category.category}}</h1>
+        <div class="services-list">
+            {% for service in all_services %}
+                <div class="service-card">
+                    <h2>{{ service.title }}</h2>
+                    <p>Длительность: {{ service.duration }} minutes</p>
+                    <p>Цена: {{ service.cost }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
