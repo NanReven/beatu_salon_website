@@ -1,0 +1,21 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}
+    master.first_name
+{% endblock %}
+
+{% block css_link %}
+    <link rel="stylesheet" href="{% static 'masters/css/master_info.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="master-detail">
+        <img src="{{ master.photo.url }}" alt="{{ master.first_name }}">
+        <div class="master-info">
+            <h2>{{ master.first_name }} {{ master.second_name }}</h2>
+            <p>{{ master.full_description }}</p>
+        </div>
+    </div>
+{% endblock %}

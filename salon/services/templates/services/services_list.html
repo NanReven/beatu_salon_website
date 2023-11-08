@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'main/layout.html' %}
 
-</body>
-</html>
+{% load static %}
+
+
+{% block title %} title {% endblock %}
+
+{% block content %}
+    <section id="masters">
+        {% for service in all_services %}
+            <div class="master-card">
+                <!--<img src="{{master.photo.url}}" alt="{{master.first_name}}}"> -->
+                <h2>{{service.title}}</h2>
+                <p>{{service.description}}</p>
+                <p>{{service.cost}}</p>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

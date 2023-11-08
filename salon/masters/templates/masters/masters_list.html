@@ -13,8 +13,9 @@
 {% block content %}
     <section id="masters">
         {% for master in all_masters %}
-            <div class="master-card">
+            <div class="master-card" onclick="window.location.href='{% url 'master_info' master.slug %}'">
                 <img src="{{master.photo.url}}" alt="{{master.first_name}}}">
+
                 <h2>{{master.first_name}} {{master.second_name}}</h2>
                 <p>{{master.short_description}}</p>
             </div>

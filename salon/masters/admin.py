@@ -3,6 +3,11 @@ from .models import Masters
 from .models import Speciality
 from .models import MasterSpeciality
 
-admin.site.register(Masters)
+
+class MasterAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('first_name', 'second_name')}
+
+
+admin.site.register(Masters, MasterAdmin)
 admin.site.register(Speciality)
 admin.site.register(MasterSpeciality)

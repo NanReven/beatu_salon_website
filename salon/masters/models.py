@@ -9,6 +9,10 @@ class Masters(models.Model):
     short_description = models.CharField('Краткая информация', max_length=200)
     full_description = models.TextField('Полная информация')
     rating = models.PositiveIntegerField('Рейтинг')
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
+
+    def __str__(self):
+        return self.second_name
 
     class Meta:
         verbose_name = 'Мастер'
@@ -18,6 +22,9 @@ class Masters(models.Model):
 class Speciality(models.Model):
     speciality_id = models.BigAutoField(primary_key=True)
     speciality = models.CharField('Специальность', max_length=50)
+
+    def __str__(self):
+        return self.speciality
 
     class Meta:
         verbose_name = 'Специальность'
