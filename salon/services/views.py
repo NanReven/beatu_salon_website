@@ -15,3 +15,8 @@ def category_info(request, category_slug):
         'category': category
     }
     return render(request, 'services/category_info.html', context)
+
+
+def service_info(request, category_slug, service_slug):
+    service = get_object_or_404(Services, slug=service_slug)
+    return render(request, 'services/service_info.html', {'service': service})

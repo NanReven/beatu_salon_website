@@ -12,12 +12,15 @@
 {% block content %}
     <div class="category-services">
         <h1>{{category.category}}</h1>
+
         <div class="services-list">
             {% for service in all_services %}
-                <div class="service-card">
+                <div class="service-card"
+                     onclick="window.location.href='{% url 'service_info' category.slug service.slug %}'">
                     <h2>{{ service.title }}</h2>
                     <p>Длительность: {{ service.duration }} minutes</p>
                     <p>Цена: {{ service.cost }}</p>
+                    <p>{{service.slug}}</p>
                 </div>
             {% endfor %}
         </div>
