@@ -12,7 +12,6 @@
 
 {% block content %}
     {% for category in all_categories %}
-
     <div class="image-grid">
         <div class="image-container">
             <div class="category-card" onclick="window.location.href='{% url 'category_info' category.slug %}'">

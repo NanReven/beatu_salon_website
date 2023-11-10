@@ -3,7 +3,7 @@
 {% load static %}
 
 
-{% block title %} all_services {% endblock %}
+{% block title %} {{category.category}} {% endblock %}
 
 {% block css_link %}
     <link rel="stylesheet" href="{% static 'services/css/category_info.css' %}">
@@ -18,9 +18,8 @@
                 <div class="service-card"
                      onclick="window.location.href='{% url 'service_info' category.slug service.slug %}'">
                     <h2>{{ service.title }}</h2>
-                    <p>Длительность: {{ service.duration }} minutes</p>
+                    <p>Длительность: {{ service.duration }}</p>
                     <p>Цена: {{ service.cost }}</p>
-                    <p>{{service.slug}}</p>
                 </div>
             {% endfor %}
         </div>

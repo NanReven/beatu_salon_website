@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{service.title}}</title>
-</head>
-<body>
-    <h1>{{service.title}}</h1>
-</body>
-</html>
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+
+{% block title %} {{service.title}} {% endblock %}
+
+{% block css_link %}
+    <link rel="stylesheet" href="{% static 'services/css/category_info.css' %}">
+{% endblock %}
