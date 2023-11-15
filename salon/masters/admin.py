@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Masters
-from .models import Category
+from .models import Categories
 
 
 class MasterAdmin(admin.ModelAdmin):
@@ -8,8 +8,8 @@ class MasterAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('category', )}
+    prepopulated_fields = {'slug': ('title', )}
 
 
 admin.site.register(Masters, MasterAdmin)
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(Categories, CategoryAdmin)

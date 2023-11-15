@@ -8,3 +8,15 @@
 {% block css_link %}
     <link rel="stylesheet" href="{% static 'services/css/category_info.css' %}">
 {% endblock %}
+
+{% block content %}
+    <div class="">
+        <div class="">
+                <img src="{{service.photo.url}}" alt="{{service.title}}">
+                <h2>{{ service.title }}</h2>
+                <p>Длительность: {{ service.duration }}</p>
+                <p>Цена: {{ service.cost }}</p>
+                </div>
+        </div>
+    </div>
+{% endblock %}

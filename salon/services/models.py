@@ -1,11 +1,11 @@
 from django.db import models
-from masters.models import Category
+from masters.models import Categories
 
 
 class Services(models.Model):
     service_id = models.BigAutoField(primary_key=True)
     title = models.CharField('Название', max_length=20)
-    category_id = models.ForeignKey(Category,  on_delete=models.SET_NULL, null=True)
+    category_id = models.ForeignKey(Categories,  on_delete=models.SET_NULL, null=True,  verbose_name='Категория')
     description = models.TextField('Описание')
     duration = models.DurationField('Длительность')
     cost = models.DecimalField('Стоимость', max_digits=5, decimal_places=0)
