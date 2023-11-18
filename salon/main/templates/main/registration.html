@@ -1,0 +1,60 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+
+{% block title %}
+    Регистрация
+{% endblock %}
+
+{% block css_link %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <!-- делаем самую простую вёрстку -->
+        <div class="col-md-12">
+            <h2>Регистрация</h2>
+            <p>Заполните все поля, чтобы создать новый аккаунт.</p>
+
+        </div>
+    </div>
+
+    <!-- форма регистрации -->
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label>Имя</label>
+        {{form.first_name}}
+    </div>
+    <div class="form-group">
+        <label>Фамилия</label>
+        {{form.second_name}}
+    </div>
+    <div class="form-group">
+        <label>Электронная почта</label>
+        {{form.email}}
+    </div>
+    <!-- поле ввода пароля -->
+    <div class="form-group">
+        <label>Пароль</label>
+        {{form.password}}
+    </div>
+    <!-- поле повторного ввода пароля -->
+    <div class="form-group">
+        <label>Повторите пароль</label>
+        <input type="password" name="confirm_password" class="form-control" required>
+    </div>
+    <!-- кнопка отправки данных на сервер -->
+    <div class="form-group">
+        <input type="submit" name="submit" class="btn btn-primary" value="Зарегистрироваться">
+    </div>
+    <span>{{error}}</span>
+    <!-- вход для тех, у кого уже есть аккаунт -->
+    <p>Уже зарегистрированы? <a href="{% url 'auth' %}">Войдите в систему</a>.</p>
+</form>
+</div>
+
+{% endblock %}
