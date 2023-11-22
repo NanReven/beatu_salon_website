@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from .forms import UsersForm
 
@@ -10,6 +11,8 @@ def registrate(request):
     error = ''
     if request.method == 'POST':
         form = UsersForm(request.POST)
+        if form.data['password'] != form.data['confirm_password']:
+            error = 'password is not confirmed'
         if form.is_valid():
             form.save()
         else:

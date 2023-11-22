@@ -11,7 +11,7 @@ class Users(models.Model):
     password = models.CharField('Пароль', max_length=20)
 
     def __str__(self):
-        return f"{self.first_name} + {self.second_name}"
+        return f"{self.first_name} {self.second_name}"
 
     class Meta:
         verbose_name = 'Пользователь'
