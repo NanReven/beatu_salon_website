@@ -2,4 +2,4 @@ from django.shortcuts import render
 
 
 def products_list(request):
-    return render(request, 'products/delete.html')
+    return render(request, 'products/products_list.html')

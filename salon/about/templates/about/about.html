@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>About</title>
-</head>
-<body>
+{% extends 'main/layout.html' %}
 
-</body>
-</html>
+{% load static %}
+
+{% block title %}
+    Версаль
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Это страница Bootstrap</h1>
+            <p>На странице создан контейнер фиксированной ширины
+            class="container".</p>
+            <p>В контейнер вложена одна строка class="row."</p>
+            <p>В строке нахьдится один адаптивный блок class="col".</p>
+            <p>С изменением размера окна браузера ширина элементов
+            контейнера будет меняться в разных контрольных точках.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

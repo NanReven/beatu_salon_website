@@ -7,73 +7,137 @@
 {% endblock %}
 
 {% block css_link %}
-    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/carousel.css' %}">
 {% endblock %}
 
 {% block content %}
-    <section id="home">
-        <div class="about">
-            <h1>Добро пожаловать в Версаль</h1>
-            <p>Ваш лучший выбор для красоты и релаксации</p>
-        </div>
-        <div class="image-grid">
-            <div class="image-container">
-                <a href="{%url 'services_list' %}">
-                    <img src="{% static 'main/img/haircut.jpg' %}" alt="Service 1">
-                    <div class="overlay">
-                        <div class="caption">Стрижка</div>
-                    </div>
-                </a>
-            </div>
-            <div class="image-container">
-                <a href="{%url 'services_list' %}">
-                    <img src="{% static 'main/img/manicure.jpg' %}" alt="Service 1">
-                    <div class="overlay">
-                        <div class="caption">Маникюр</div>
-                    </div>
-                </a>
-            </div>
-            <div class="image-container">
-                <a href="{%url 'services_list' %}">
-                    <img src="{% static 'main/img/massage.jpg' %}" alt="Service 1">
-                    <div class="overlay">
-                        <div class="caption">Массаж</div>
-                    </div>
-                </a>
-            </div>
-            <div class="image-container">
-                <a href="{%url 'services_list' %}">
-                    <img src="{% static 'main/img/tinting.jpg' %}" alt="Service 1">
-                    <div class="overlay">
-                        <div class="caption">Брови</div>
-                    </div>
-                </a>
-            </div>
-            <div class="image-container">
-                <a href="{%url 'services_list' %}">
-                    <img src="{% static 'main/img/care.jpg' %}" alt="Service 1">
-                    <div class="overlay">
-                        <div class="caption">Эпиляция</div>
-                    </div>
-                </a>
-            </div>
-            <div class="image-container">
-                <a href="{%url 'services_list' %}">
-                    <img src="{% static 'main/img/reservation.jpg' %}" alt="Service 1">
-                    <div class="overlay">
-                        <div class="caption">Бронь</div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
+<main>
 
-    <section id="about">
-        <p>Погрузитесь в мир красоты и релаксации в нашем изысканном салоне. Наша команда квалифицированных
-            специалистов стремится подчеркнуть вашу естественную красоту и оживить ваш дух.</p>
-        <p>Ощутите широкий спектр роскошных услуг и откройте для себя идеальное сочетание спокойствия и преображения.
-            Добро пожаловать в наше святилище красоты и благополучия.</p>
-    </section>
+  <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="container">
+          <img src="{% static 'main/img/logo.png' %}" class="bd-placeholder-img" alt="Your Image Description" width="100%" height="100%">
+          <div class="carousel-caption text-start">
+            <h1>Версаль</h1>
+            <p>Салон красоты</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Войти в аккаунт</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'main/img/logo.png' %}" class="bd-placeholder-img" alt="Your Image Description" width="100%" height="100%">
+        <div class="container">
+          <div class="carousel-caption">
+            <h1>Версалл</h1>
+            <p>Салон</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Услуги</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'main/img/logo.png' %}" class="bd-placeholder-img" alt="Your Image Description" width="100%" height="100%">
+        <div class="container">
+          <div class="carousel-caption text-end">
+            <h1>Версаль</h1>
+            <p>Салон красоты</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Мастера</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <!-- Wrap the rest of the page in another container to center all the content. -->
+
+  <div class="container marketing">
+    <div class="row">
+      <div class="col-lg-4">
+        <img src="{% static 'main/img/logo.png' %}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" alt="Placeholder Image">
+
+        <h2>Exquisite Beauty</h2>
+        <p>A sanctuary of beauty and well-being awaits you at Versailles Salon. Immerse yourself in a world of pampering and rejuvenation.</p>
+        <p><a class="btn btn-secondary" href="#">Learn More</a></p>
+      </div><!-- /.col-lg-4 -->
+
+      <div class="col-lg-4">
+        <img src="{% static 'main/img/logo.png' %}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" alt="Placeholder Image">
+
+        <h2>Your Personal Oasis</h2>
+        <p>Versailles Salon is your personal oasis of style and elegance. Our skilled professionals are dedicated to enhancing your natural beauty.</p>
+        <p><a class="btn btn-secondary" href="#">Explore Services</a></p>
+      </div><!-- /.col-lg-4 -->
+
+      <div class="col-lg-4">
+        <img src="{% static 'main/img/logo.png' %}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" alt="Placeholder Image">
+
+        <h2>Unparalleled Expertise</h2>
+        <p>At Versailles, we pride ourselves on delivering beauty with unparalleled expertise. Trust our experienced team to elevate your salon experience.</p>
+        <p><a class="btn btn-secondary" href="#">Meet Our Team</a></p>
+      </div><!-- /.col-lg-4 -->
+    </div><!-- /.row -->
+
+
+    <!-- START THE FEATURETTES -->
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Luxurious Beauty Experience. <span class="text-muted">Indulge in the art of beauty.</span></h2>
+        <p class="lead">Explore our exquisite services and pamper yourself in an atmosphere of elegance and style. Our skilled professionals are dedicated to providing you with a luxurious beauty experience.</p>
+      </div>
+      <div class="col-md-5">
+        <img src="{% static 'main/img/logo.png' %}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" alt="Placeholder Image" width="500" height="500">
+      </div>
+    </div>
+
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7 order-md-2">
+        <h2 class="featurette-heading">Discover Beauty in Every Detail. <span class="text-muted">Captivating and rejuvenating.</span></h2>
+        <p class="lead">Immerse yourself in the details that make our salon exceptional. From rejuvenating treatments to captivating styling, we take pride in delivering beauty experiences that exceed expectations.</p>
+      </div>
+      <div class="col-md-5 order-md-1">
+        <img src="{% static 'main/img/logo.png' %}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" alt="Placeholder Image" width="500" height="500">
+      </div>
+    </div>
+
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading">Elevate Your Beauty Journey. <span class="text-muted">Unparalleled expertise and care.</span></h2>
+        <p class="lead">Experience the pinnacle of beauty with our expert team. From personalized consultations to skillful execution, we are committed to elevating your beauty journey with unparalleled expertise and care.</p>
+      </div>
+      <div class="col-md-5">
+        <img src="{% static 'main/img/logo.png' %}" class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" alt="Placeholder Image" width="500" height="500">
+      </div>
+    </div>
+
+
+    <hr class="featurette-divider">
+
+  </div><!-- /.container -->
+</main>
+
 
 {% endblock %}
 
