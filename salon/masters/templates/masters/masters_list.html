@@ -7,7 +7,30 @@
 {% endblock %}
 
 {% block css_link %}
-    <link rel="stylesheet" href="{% static 'masters/css/style.css' %}">
+
+{% endblock %}
+
+{% block style_code %}
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s;
+  }
+
+  .card-link:hover .card {
+    transform: scale(1.05);
+  }
+  .card-link:hover .master-name {
+    display: block;
+  }
+  .master-image {
+    width: 100%; /* Ensure the image takes up the full width of the card */
+    height: 200px; /* Adjust the height as needed */
+    object-fit: cover; /* Maintain aspect ratio and cover the entire container */
+  }
+
+
+
 {% endblock %}
 
 {% block content %}
@@ -23,25 +46,35 @@
 
   <div class="album py-5 bg-light">
     <div class="container">
-
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        <div class="col">
-          <div class="card shadow-sm">
-          {% for master in all_masters %}
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{master.first_name}} {{master.second_name}}</text></svg>
+        {% for master in all_masters %}
+          <div class="col">
+            <a href="{% url 'master_info' master.slug %}" class="card-link">
+              <div class="card shadow-sm">
+    <img
+      src="{{master.photo.url}}"
+      alt="{{ master.first_name }} {{ master.second_name }}"
+      class="bd-placeholder-img card-img-top master-image"
+    />
 
-            <div class="card-body">
-              <p class="card-text">{{master.short_description}}</p>
-              <div class="d-flex justify-content-between align-items-center">
-
-                <small class="text-muted">{{master.category_id}}</small>
-              </div>
-            </div>
-              {% endfor %}
-          </div>
-        </div>
+    <div class="card-body">
+      <p class="card-text">{{ master.short_description }}</p>
+      <div class="d-flex justify-content-between align-items-center">
+        <small class="text-muted">{{ master.category_id }}</small>
       </div>
+
+      <!-- Master's name and surname initially hidden -->
+      <p class="master-name d-none">{{ master.first_name }} {{ master.second_name }}</p>
     </div>
   </div>
+
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
 
 {% endblock %}
