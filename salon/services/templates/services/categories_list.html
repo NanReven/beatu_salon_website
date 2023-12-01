@@ -6,23 +6,47 @@
 {% block title %} Services {% endblock %}
 
 {% block css_link %}
-    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'masters/css/style.css' %}">
 {% endblock %}
 
 
 {% block content %}
-    {% for category in all_categories %}
-    <div class="image-grid">
-        <div class="image-container">
-            <div class="category-card" onclick="window.location.href='{% url 'category_info' category.slug %}'">
-            <img src="{{category.photo.url}}" alt="{{category.category}}">
-            <div class="overlay">
-                    <div class="caption">{{category.category}}</div>
-            </div>
-        </div>
-    </div>
-    </div>
 
-    {% endfor %}
+
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Masters</h1>
+        <p class="lead text-muted">List of all masters</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for category in all_categories %}
+          <div class="col">
+            <a href="{% url 'category_info' category.slug %}" class="card-link">
+              <div class="card shadow-sm">
+    <img
+      src="{{category.photo.url}}"
+      alt="{{category.title}}
+      class="bd-placeholder-img card-img-top master-image"
+    />
+
+    <div class="card-body">
+      <p class="card-text">{{category.title}}</p>
+
+      <!-- Master's name and surname initially hidden -->
+    </div>
+  </div>
+
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 
 {% endblock %}

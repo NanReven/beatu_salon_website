@@ -7,30 +7,7 @@
 {% endblock %}
 
 {% block css_link %}
-
-{% endblock %}
-
-{% block style_code %}
-  .card-link {
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s;
-  }
-
-  .card-link:hover .card {
-    transform: scale(1.05);
-  }
-  .card-link:hover .master-name {
-    display: block;
-  }
-  .master-image {
-    width: 100%; /* Ensure the image takes up the full width of the card */
-    height: 200px; /* Adjust the height as needed */
-    object-fit: cover; /* Maintain aspect ratio and cover the entire container */
-  }
-
-
-
+    <link rel="stylesheet" href="{% static 'masters/css/style.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -58,13 +35,13 @@
     />
 
     <div class="card-body">
+      <p class="card-text">{{ master.first_name}}  {{master.second_name}}</p>
       <p class="card-text">{{ master.short_description }}</p>
       <div class="d-flex justify-content-between align-items-center">
         <small class="text-muted">{{ master.category_id }}</small>
       </div>
 
       <!-- Master's name and surname initially hidden -->
-      <p class="master-name d-none">{{ master.first_name }} {{ master.second_name }}</p>
     </div>
   </div>
 

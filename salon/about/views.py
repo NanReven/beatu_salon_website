@@ -3,4 +3,4 @@ from django.shortcuts import render
 
 
 def about_us(request):
-    return HttpResponse('<h1>About</h1>')
+    return render(request, 'about/about.html')

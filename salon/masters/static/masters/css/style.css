@@ -1,27 +1,19 @@
-section {
-    padding: 50px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s;
 }
 
-.master-card {
-    border: 1px solid #ccc;
-    padding: 20px;
-    margin: 10px;
-    text-align: center;
-    cursor: pointer;
-    max-width: 300px;
-    transition: transform 0.3s;
-}
-
-.master-card:hover {
+.card-link:hover .card {
     transform: scale(1.05);
 }
 
-.master-card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 50%;
-    margin-bottom: 10px;
+.card-link:hover .master-name {
+    display: block;
+}
+
+.master-image {
+    width: 100%; /* Ensure the image takes up the full width of the card */
+    height: 200px; /* Adjust the height as needed */
+    object-fit: cover; /* Maintain aspect ratio and cover the entire container */
 }

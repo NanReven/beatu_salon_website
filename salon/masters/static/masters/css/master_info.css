@@ -1,24 +1,8 @@
-.master-detail {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: left;
+.master-details {
+  margin-top: 50px;
 }
 
-.master-detail img {
-    max-width: 100%;
-    height: auto;
-}
-
-.master-info {
-    margin-top: 20px;
-}
-
-.master-info h2 {
-    font-size: 2em;
-    margin-bottom: 10px;
-}
-
-.master-info p {
-    font-size: 1.2em;
-    color: #555;
+.master-photo {
+  max-width: 100%;
+  height: auto;
 }
