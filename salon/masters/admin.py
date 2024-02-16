@@ -9,6 +9,7 @@ class MasterAdmin(admin.ModelAdmin):
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title', )}
+    search_fields = ('first_name', )
 
 
 admin.site.register(Masters, MasterAdmin)

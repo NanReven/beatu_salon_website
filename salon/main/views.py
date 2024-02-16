@@ -1,4 +1,5 @@
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from .forms import UsersForm
 
@@ -28,3 +29,7 @@ def registrate(request):
 
 def auth(request):
     return render(request, 'main/auth.html')
+
+
+def pageNotFound(request, exception):
+    return HttpResponseNotFound('<h1>Page not found</h1>')
