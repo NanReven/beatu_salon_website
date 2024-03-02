@@ -12,8 +12,6 @@ def registrate(request):
     error = ''
     if request.method == 'POST':
         form = UsersForm(request.POST)
-        if form.data['password'] != form.data['confirm_password']:
-            error = 'password is not confirmed'
         if form.is_valid():
             form.save()
         else:
@@ -31,5 +29,5 @@ def auth(request):
     return render(request, 'main/auth.html')
 
 
-def pageNotFound(request, exception):
+def page_not_found(request, exception):
     return HttpResponseNotFound('<h1>Page not found</h1>')

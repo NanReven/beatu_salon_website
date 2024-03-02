@@ -5,7 +5,7 @@ from django.forms import ModelForm, TextInput
 class UsersForm(ModelForm):
     class Meta:
         model = Users
-        fields = ['first_name', 'second_name', 'email', 'phone', 'password']
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'password']
 
         widgets = {
             'first_name': TextInput(attrs={
@@ -13,7 +13,7 @@ class UsersForm(ModelForm):
                 'required': True,
                 'type': 'text'
             }),
-            'second_name': TextInput(attrs={
+            'last_name': TextInput(attrs={
                 'class': 'form-control',
                 'required': True,
                 'type': 'text'
@@ -23,7 +23,7 @@ class UsersForm(ModelForm):
                 'required': True,
                 'type': 'email'
             }),
-            'phone': TextInput(attrs={
+            'phone_number': TextInput(attrs={
                 'class': 'form-control',
                 'required': True,
                 'type': 'phone'
