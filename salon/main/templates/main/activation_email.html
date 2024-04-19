@@ -1,0 +1,11 @@
+{% autoescape off %}
+Hi {{ user.first_name }},
+
+Thank you for registering with Company X. Please click the link below to activate your account:
+<a>{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}</a>
+
+If you didn't register, please ignore this email.
+
+Best regards,
+Company X Team
+{% endautoescape %}

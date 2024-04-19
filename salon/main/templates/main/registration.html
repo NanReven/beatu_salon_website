@@ -14,11 +14,9 @@
 
 <div class="container">
     <div class="row">
-        <!-- делаем самую простую вёрстку -->
         <div class="col-md-12">
             <h2>Регистрация</h2>
             <p>Заполните все поля, чтобы создать новый аккаунт.</p>
-
         </div>
     </div>
 
@@ -27,38 +25,64 @@
     {% csrf_token %}
     <div class="form-group">
         <label>Имя</label>
-        {{form.first_name}}
+        {{ form.first_name }}
+        {{ form.first_name.errors }}
     </div>
     <div class="form-group">
         <label>Фамилия</label>
-        {{form.last_name}}
+        {{ form.last_name }}
+        {{ form.last_name.errors }}
     </div>
     <div class="form-group">
         <label>Электронная почта</label>
-        {{form.email}}
+        {{ form.email }}
+        {{ form.email.errors }}
     </div>
     <div class="form-group">
         <label>Телефон</label>
-        {{form.phone_number}}
+        {{ form.phone_number }}
+        {{ form.phone_number.errors }}
     </div>
     <!-- поле ввода пароля -->
     <div class="form-group">
         <label>Пароль</label>
-        {{form.password}}
+        {{ form.password }}
+        {{ form.password.errors }}
     </div>
     <!-- поле повторного ввода пароля -->
     <div class="form-group">
         <label>Повторите пароль</label>
-        <input type="password" name="confirm_password" class="form-control" required>
+        {{ form.password2 }}
+        {{ form.password2.errors }}
     </div>
     <!-- кнопка отправки данных на сервер -->
     <div class="form-group">
         <input type="submit" name="submit" class="btn btn-primary" value="Зарегистрироваться">
     </div>
-    <span>{{error}}</span>
+    <!-- вывод ошибок формы -->
+    {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for field, errors in form.errors.items %}
+                {{ field }}: {{ errors }}
+            {% endfor %}
+        </div>
+    {% endif %}
     <!-- вход для тех, у кого уже есть аккаунт -->
-    <p>Уже зарегистрированы? <a href="{% url 'auth' %}">Войдите в систему</a>.</p>
+    <p>Уже зарегистрированы? <a href="{% url 'login' %}">Войдите в систему</a>.</p>
 </form>
+
 </div>
 
+{% endblock %}
+
+{%block js_link%}
+<script src="https://unpkg.com/imask"></script>
+<script>
+  IMask(
+  document.getElementById('id_phone_number'),
+  {
+    mask: '+{7}(000)-000-00-00'
+  }
+)
+  </script>
 {% endblock %}
