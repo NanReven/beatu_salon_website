@@ -1,0 +1,64 @@
+{% extends 'main/main_layout.html' %}
+
+{% block title %}Personal Account{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-white">Welcome to your master account, {{ user.first_name }}!</h1>
+    <p class="text-white">This is your personal account.</p>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Personal Information
+                </div>
+                <div class="card-body">
+                    <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <a class="btn btn-primary">Edit Profile</a>
+                    <a class="btn btn-secondary">Change Password</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Salon Visit Requests
+                </div>
+                <div class="card-body">
+                    {% if master_bookings %}
+                        <ul>
+                            {% for booking in master_bookings %}
+                                <li>
+                                    Date: {{ booking.date }}, Time: {{ booking.time }}, User: {{ booking.user }}, Service: {{ booking.service }}
+                                    {% if booking.status == '2' %}
+                                        <form action="{% url 'accept_booking' booking.id %}" method="post" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success">Accept</button>
+                                        </form>
+                                        <form action="{% url 'decline_booking' booking.id %}" method="post" style="display: inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Decline</button>
+                                        </form>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No salon visit requests available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <a href="{% url 'logout' %}" class="btn btn-danger">Log Out</a>
+            <a href="{% url 'booking' %}" class="btn btn-danger">Book an appointment</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

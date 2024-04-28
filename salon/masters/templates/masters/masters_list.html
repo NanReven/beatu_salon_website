@@ -1,4 +1,4 @@
-{% extends 'main/layout.html' %}
+{% extends 'main/main_layout.html' %}
 
 {% load static %}
 
@@ -11,46 +11,43 @@
 {% endblock %}
 
 {% block content %}
-
     <section class="py-5 text-center container">
-    <div class="row py-lg-5">
-      <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">Masters</h1>
-        <p class="lead text-muted">List of all masters</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        {% for master in all_masters %}
-          <div class="col">
-            <a href="{% url 'master_info' master.slug %}" class="card-link">
-              <div class="card shadow-sm">
-    <img
-      src="{{master.photo.url}}"
-      alt="{{ master.first_name }} {{ master.second_name }}"
-      class="bd-placeholder-img card-img-top master-image"
-    />
-
-    <div class="card-body">
-      <p class="card-text">{{ master.first_name}}  {{master.second_name}}</p>
-      <p class="card-text">{{ master.short_description }}</p>
-      <div class="d-flex justify-content-between align-items-center">
-        <small class="text-muted">{{ master.category_id }}</small>
-      </div>
-
-      <!-- Master's name and surname initially hidden -->
-    </div>
-  </div>
-
-          </a>
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light text-white">Мастера салона Континенталь</h1>
+                <p class="lead text-white">В нашем салоне работают профессионалы</p>
+            </div>
         </div>
-      {% endfor %}
+    </section>
+
+    <div class="album py-5">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                {% for master in all_masters %}
+                    <div class="col">
+                        <a href="{% url 'master_info' master.slug %}" class="card-link">
+                            <div class="card shadow-sm">
+                                <img
+                                        src="{{ master.photo.url }}"
+                                        alt="{{ master.user.first_name }} {{ master.user.second_name }}"
+                                        class="bd-placeholder-img card-img-top master-image"
+                                />
+
+                                <div class="card-body">
+                                    <p class="card-text">{{ master.user.first_name }} {{ master.user.last_name }}</p>
+                                    <p class="card-text">{{ master.short_description }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-black-50">{{ master.position }}</small>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 
 

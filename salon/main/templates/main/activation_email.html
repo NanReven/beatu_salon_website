@@ -1,11 +1,25 @@
-{% autoescape off %}
-Hi {{ user.first_name }},
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Активация аккаунта</title>
+</head>
+<body>
 
-Thank you for registering with Company X. Please click the link below to activate your account:
-<a>{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}</a>
+<p>Здравствуйте, {{ user.first_name }},</p>
 
-If you didn't register, please ignore this email.
+<p>Благодарим вас за регистрацию на сайте "Континенталь". Пожалуйста, перейдите по ссылке ниже, чтобы активировать ваш аккаунт:</p>
 
-Best regards,
-Company X Team
-{% endautoescape %}
+<p><a href="{{ activation_link }}">Активировать аккаунт</a></p>
+
+<p>Если вы не регистрировались, пожалуйста, проигнорируйте это письмо.</p>
+
+<p>С наилучшими пожеланиями,<br>
+Команда "Континенталь"</p>
+
+<img src="{{ logo_url }}" alt="Логотип Континенталь">
+
+</body>
+</html>

@@ -1,7 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils.text import slugify
+from unidecode import unidecode
+from django.template.defaultfilters import slugify
 
 
 class UserManager(BaseUserManager):
@@ -44,7 +45,7 @@ class Users(AbstractUser):
     email = models.EmailField(verbose_name='Почта', max_length=50, unique=True, db_index=True)
     phone_number = models.CharField(verbose_name='Номер телефона', max_length=20, unique=True)
     is_customer = models.BooleanField(verbose_name='Клиент', default=True, help_text='Уберите отметку, '
-                                                                                     'если пользователь является сотрудником салона')
+                                                                        'если пользователь является сотрудником салона')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -74,8 +75,8 @@ class Masters(models.Model):
         return f"{self.user.first_name} {self.user.last_name}"
 
     def save(self, *args, **kwargs):
-        # Automatically set the slug based on user's first_name and last_name
-        self.slug = slugify(f"{self.user.first_name} {self.user.last_name}")
+        msg = f"{self.user.first_name} {self.user.last_name}"
+        self.slug = slugify(unidecode(msg))
         super().save(*args, **kwargs)
 
     class Meta:

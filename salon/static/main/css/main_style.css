@@ -1,0 +1,37 @@
+body {
+	background-color: #1c1f23;
+}
+
+header, section, footer {
+	padding: 100px 0;
+}
+
+.header-logo {
+    max-width: 20vh;
+    max-height: 20vh;
+}
+
+nav ul {
+	list-style-type: none;
+	display: flex;
+	justify-content: space-around;
+}
+
+ul a {
+	color: whitesmoke;
+	text-decoration: none;
+}
+
+ul a:hover {
+    color: whitesmoke;
+	border-bottom: 3px solid grey;
+}
+
+/* template styles */
+.centered {
+	display: block;
+	max-width: 200px;
+	margin: 0 auto;
+	padding: 8px 30px;
+	color: white;
+}

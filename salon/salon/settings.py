@@ -57,6 +57,9 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
 ]
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 12 * 60 * 60
+
 ROOT_URLCONF = 'salon.urls'
 
 TEMPLATES = [

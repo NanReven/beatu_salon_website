@@ -9,7 +9,7 @@ def services_list(request):
 
 def category_info(request, category_slug):
     category = get_object_or_404(Categories, slug=category_slug)
-    all_services = Services.objects.all().filter(category_id=category.category_id)
+    all_services = Services.objects.all().filter(category_id=category.pk)
     context = {
         'all_services': all_services,
         'category': category
