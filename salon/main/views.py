@@ -1,10 +1,11 @@
-from django.conf import settings
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.templatetags.static import static
@@ -19,11 +20,29 @@ from .models import Appointments
 
 
 def index(request):
-    current_site = get_current_site(request)
-    protocol = 'https' if request.is_secure() else 'http'
-    msg = f'{protocol}://{current_site.domain}{static("main/img/favicon.ico")}'
-    print(msg)
     return render(request, "main/main.html")
+
+
+def schedule(request):
+    return render(request, "main/schedule.html")
+
+
+def get_appointments(request):
+    appointments_date = datetime.date(int(request.GET.get('year')), int(request.GET.get('month')),
+                                      int(request.GET.get('day')))
+    master = Masters.objects.filter(user=request.user)[0]
+    appointments = Appointments.objects.filter(master=master, date=appointments_date, status='1')
+    appointment_list = []
+    for appointment in appointments:
+        appointment_data = {
+            'date': appointment.date,
+            'time': appointment.time,
+            'service': appointment.service.title,
+            'user': appointment.user.first_name + ' ' + appointment.user.last_name,
+        }
+        appointment_list.append(appointment_data)
+
+    return JsonResponse(appointment_list, safe=False)
 
 
 def get_activation_email(request, user):
@@ -87,7 +106,6 @@ def activate_account(request, uidb64, token):
 
 
 def loginUser(request):
-    print('LoginUser')
     if request.user.is_authenticated:
         return redirect('account')
 
@@ -136,23 +154,36 @@ def account(request):
         return render(request, 'main/master_account.html', {'master_bookings': master_bookings})
 
 
+@login_required
 def booking(request):
     if request.method == 'POST':
         form = AppointmentsForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.user = request.user
+            appointment_time = datetime.timedelta(hours=appointment.time.hour, minutes=appointment.time.minute)
+            for master_appointment in Appointments.objects.filter(date=appointment.date, master=appointment.master,
+                                                                  status='1'):
+                appointment_end = datetime.timedelta(hours=master_appointment.time.hour,
+                                                     minutes=master_appointment.time.minute) + \
+                                  datetime.timedelta(hours=master_appointment.service.duration.hour,
+                                                     minutes=master_appointment.service.duration.minute)
+                appointment_start = datetime.timedelta(hours=master_appointment.time.hour,
+                                                       minutes=master_appointment.time.minute)
+                if appointment_start <= appointment_time <= appointment_end:
+                    messages.error(request, "Выбранное время уже занято.")
+                    return render(request, 'main/booking.html', {'form': form})
+
             appointment.save()
             return redirect('account')
-        else:
-            print(form.errors)
     else:
         form = AppointmentsForm()
-    return render(request, 'main/booking.html', {'form': form})
+    message_list = messages.get_messages(request)
+    messages_to_show = list(message_list)
+    return render(request, 'main/booking.html', {'form': form, 'messages': messages_to_show})
 
 
 def accept_booking(request, booking_id):
-    print('accept')
     if request.method == 'POST':
         bid = Appointments.objects.get(id=booking_id)
         bid.status = '1'
@@ -161,7 +192,6 @@ def accept_booking(request, booking_id):
 
 
 def decline_booking(request, booking_id):
-    print('decline')
     if request.method == 'POST':
         bid = Appointments.objects.get(id=booking_id)
         bid.status = '0'
