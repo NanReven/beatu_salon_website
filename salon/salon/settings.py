@@ -154,3 +154,8 @@ EMAIL_ADMIN = EMAIL_HOST_USER
 
 TIME_ZONE = 'Europe/Moscow' #UTC +2
 USE_TZ = True
+
+# url to redirect after successfull login
+LOGIN_REDIRECT_URL = '/account/'
+LOGIN_URL = '/login/'
+

@@ -10,13 +10,18 @@ $(document).ready(function() {
         let selectedDay = value.getDate();
         let selectedMonth = value.getMonth() + 1;
         let selectedYear = value.getFullYear();
+        let selectedMaster = document.getElementById('id_master');
+        if (selectedMaster != null) {
+            selectedMaster = selectedMaster.value;
+        }
         $.ajax({
             url: "/get_appointments/",
             type: "GET",
             data: {
                 day: selectedDay,
                 month: selectedMonth,
-                year: selectedYear
+                year: selectedYear,
+                master: selectedMaster
             },
             dataType: "json",
             success: function(response) {

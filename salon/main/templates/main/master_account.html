@@ -7,6 +7,14 @@
     <h1 class="text-white">Welcome to your master account, {{ user.first_name }}!</h1>
     <p class="text-white">This is your personal account.</p>
 
+    {% if messages %}
+        <div class="alert alert-success" role="alert">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="row mt-4">
         <div class="col-md-6">
             <div class="card">
@@ -14,11 +22,11 @@
                     Personal Information
                 </div>
                 <div class="card-body">
-                    <p><strong>First Name:</strong> {{ user.first_name }}</p>
-                    <p><strong>Last Name:</strong> {{ user.last_name }}</p>
-                    <p><strong>Email:</strong> {{ user.email }}</p>
-                    <a class="btn btn-primary">Edit Profile</a>
-                    <a class="btn btn-secondary">Change Password</a>
+                    <p><strong>Имя:</strong> {{ user.first_name }}</p>
+                    <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
+                    <p><strong>Почта:</strong> {{ user.email }}</p>
+                    <a href="{% url 'edit_profile' %}" class="btn btn-primary">Сменить данные</a>
+                    <a href="{% url 'change_password' %}" class="btn btn-secondary">Сменить пароль</a>
                 </div>
             </div>
         </div>
@@ -61,5 +69,6 @@
             <a href="{% url 'schedule' %}" class="btn btn-danger">Schedule</a>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

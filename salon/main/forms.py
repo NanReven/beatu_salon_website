@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 from .models import Users
 from .models import Appointments
@@ -96,5 +97,34 @@ class AppointmentsForm(forms.ModelForm):
         }
 
 
+class ProfileEditForm(forms.Form):
+    first_name = forms.CharField(label='Имя', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    last_name = forms.CharField(label='Фамилия', max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(label='Почта', max_length=100, widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
+
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'required': True,
+        'type': 'password'
+    }))
+    new_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'required': True,
+        'type': 'password'
+    }))
+    repeat_new_password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'class': 'form-control',
+        'required': True,
+        'type': 'password'
+    }))
+
+    def clean_new_password(self):
+        new_password = self.cleaned_data['new_password']
+        try:
+            validate_password(new_password)
+        except ValidationError as e:
+            raise forms.ValidationError(str(e))
+        return new_password
 

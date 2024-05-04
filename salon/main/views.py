@@ -3,8 +3,10 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -14,8 +16,8 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from main.tokens import account_activation_token
-from masters.models import Masters
-from .forms import UserRegistrationForm, UserLoginForm, AppointmentsForm
+from masters.models import Masters, Users
+from .forms import UserRegistrationForm, UserLoginForm, AppointmentsForm, ProfileEditForm, ChangePasswordForm
 from .models import Appointments
 
 
@@ -23,14 +25,21 @@ def index(request):
     return render(request, "main/main.html")
 
 
+@login_required
 def schedule(request):
     return render(request, "main/schedule.html")
 
 
+@login_required
 def get_appointments(request):
     appointments_date = datetime.date(int(request.GET.get('year')), int(request.GET.get('month')),
                                       int(request.GET.get('day')))
-    master = Masters.objects.filter(user=request.user)[0]
+
+    if not Masters.objects.filter(user=request.user).exists():
+        master = Masters.objects.filter(pk=request.GET.get('master'))[0]
+    else:
+        master = Masters.objects.filter(user=request.user)[0]
+
     appointments = Appointments.objects.filter(master=master, date=appointments_date, status='1')
     appointment_list = []
     for appointment in appointments:
@@ -45,6 +54,16 @@ def get_appointments(request):
     return JsonResponse(appointment_list, safe=False)
 
 
+@login_required
+def cancel_booking(request, booking_id):
+    appointment = Appointments.objects.get(pk=booking_id)
+    appointment.status = '0'
+    appointment.save()
+    messages.success(request, 'Ваш успешно')
+    return redirect('account')
+
+
+@login_required
 def get_activation_email(request, user):
     current_site = get_current_site(request)
     protocol = 'https' if request.is_secure() else 'http'
@@ -127,7 +146,7 @@ def loginUser(request):
             elif user is None:
                 messages.error(request, "Неверный адрес почты или пароль.")
             else:
-                print('Form is not valid:', form.errors)
+                messages.error(request, form.errors)
 
     else:
         form = UserLoginForm()
@@ -146,11 +165,14 @@ def logoutUser(request):
 @login_required
 def account(request):
     if request.user.is_customer:
-        user_bookings = Appointments.objects.filter(user=request.user)
+        user_bookings = Appointments.objects.filter(user=request.user, date__gte=datetime.datetime.now().date())\
+            .filter(Q(status='1') | Q(status='2'))
+        user_bookings.order_by('date')
         return render(request, 'main/user_account.html', {'user_bookings': user_bookings})
     else:
         master = Masters.objects.filter(user=request.user)[0]
-        master_bookings = Appointments.objects.filter(master=master)
+        master_bookings = Appointments.objects.filter(master=master, status='2')
+        master_bookings.order_by('date').order_by('time')
         return render(request, 'main/master_account.html', {'master_bookings': master_bookings})
 
 
@@ -183,6 +205,7 @@ def booking(request):
     return render(request, 'main/booking.html', {'form': form, 'messages': messages_to_show})
 
 
+@login_required
 def accept_booking(request, booking_id):
     if request.method == 'POST':
         bid = Appointments.objects.get(id=booking_id)
@@ -191,12 +214,56 @@ def accept_booking(request, booking_id):
     return redirect('account')
 
 
+@login_required
 def decline_booking(request, booking_id):
     if request.method == 'POST':
         bid = Appointments.objects.get(id=booking_id)
         bid.status = '0'
         bid.save()
     return redirect('account')
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        edit_form = ProfileEditForm(request.POST)
+        if edit_form.is_valid():
+            user = Users.objects.get(pk=request.user.pk)
+            user.first_name = edit_form.cleaned_data['first_name']
+            user.last_name = edit_form.cleaned_data['last_name']
+            user.email = edit_form.cleaned_data['email']
+            user.save()
+            messages.success(request, 'Your profile has been successfully updated.')
+            return redirect('account')
+    else:
+        edit_form = ProfileEditForm(initial={'first_name': request.user.first_name, 'last_name': request.user.last_name,
+                                             'email': request.user.email})
+    return render(request, 'main/edit_profile.html', {'form': edit_form})
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        edit_form = ChangePasswordForm(request.POST)
+        if edit_form.is_valid():
+            if not check_password(edit_form.cleaned_data['old_password'], request.user.password):
+                messages.error(request, 'Your old password did not match')
+                return redirect('change_password')
+            new_password = edit_form.cleaned_data['new_password']
+            repeat_new_password = edit_form.cleaned_data['repeat_new_password']
+            if new_password and repeat_new_password and new_password != repeat_new_password:
+                messages.error(request, 'Your new passwords did not match')
+                return redirect('change_password')
+            user = Users.objects.get(pk=request.user.pk)
+            user.password = make_password(new_password)
+            user.save()
+            messages.success(request, 'Your password has been successfully updated.')
+            logout(request)
+            return redirect('login')
+    else:
+        edit_form = ChangePasswordForm()
+
+    return render(request, 'main/change_password.html', {'form': edit_form})
 
 
 def page_not_found(request, exception):
