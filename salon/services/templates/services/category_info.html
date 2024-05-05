@@ -3,7 +3,7 @@
 {% load static %}
 
 
-{% block title %} {{category.category}} {% endblock %}
+{% block title %} {{ category.title }} {% endblock %}
 
 {% block css_link %}
     <link rel="stylesheet" href="{% static 'services/css/category_info.css' %}">
@@ -11,7 +11,7 @@
 
 {% block content %}
     <div class="category-services">
-        <h1>{{category.category}}</h1>
+        <h1>{{ category.title }}</h1>
 
         <div class="services-list">
             {% for service in all_services %}

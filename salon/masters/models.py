@@ -67,7 +67,6 @@ class Masters(models.Model):
     full_description = models.TextField(verbose_name='Полная информация')
     photo = models.ImageField(verbose_name='Фотография', upload_to='images/')
     admission_date = models.DateField(verbose_name='Дата приема', auto_now_add=True)
-    rating = models.PositiveIntegerField(verbose_name='Рейтинг', null=True, blank=True, default=0)
     salary = models.DecimalField(verbose_name='Зарплата', max_digits=8, decimal_places=2)
     slug = models.SlugField(verbose_name='URL', max_length=50, unique=True, db_index=True, blank=True)
 

@@ -56,3 +56,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    let selectedMaster = document.getElementById("id_master");
+    let serviceSelect = document.querySelector('#id_service');
+    console.log(selectedMaster);
+    function getServices() {
+        console.log("im here");
+        $.ajax({
+            url: "/get_master_services/",
+            type: "GET",
+            data: {
+                master: selectedMaster.value,
+            },
+            dataType: "json",
+            success: function (response) {
+                    $("#id_service").empty();
+                   response.forEach(function(service) {
+                      let option = document.createElement("option");
+                      option.value = service.id;
+                      option.textContent = service.title;
+                      serviceSelect.appendChild(option);
+                   });
+            },
+            error: function (xhr, errmsg, err) {
+                console.log(errmsg);
+            }
+        });
+    };
+
+    // Добавляем обработчики событий на изменение значений полей
+    selectedMaster.addEventListener('change', getServices);
+});

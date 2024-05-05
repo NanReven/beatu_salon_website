@@ -1,4 +1,5 @@
 from django.db import models
+from masters.models import Masters
 
 
 class Categories(models.Model):
@@ -12,6 +13,15 @@ class Categories(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+
+
+class MasterCategory(models.Model):
+    master = models.ForeignKey(Masters, on_delete=models.PROTECT, null=True, verbose_name='Мастер')
+    category = models.ForeignKey(Categories, on_delete=models.PROTECT, null=True, verbose_name='Категория')
+
+    class Meta:
+        verbose_name = 'Категории мастеров'
+        verbose_name_plural = 'Категории мастеров'
 
 
 class Services(models.Model):

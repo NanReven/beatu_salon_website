@@ -17,6 +17,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from main.tokens import account_activation_token
 from masters.models import Masters, Users
+from services.models import MasterCategory, Services
 from .forms import UserRegistrationForm, UserLoginForm, AppointmentsForm, ProfileEditForm, ChangePasswordForm
 from .models import Appointments
 
@@ -53,6 +54,17 @@ def get_appointments(request):
 
     return JsonResponse(appointment_list, safe=False)
 
+
+def get_master_services(request):
+    print('function')
+    master = request.GET.get('master')
+    categories = MasterCategory.objects.filter(master=master)
+    services = []
+    for category in categories:
+        category_services = Services.objects.filter(category=category.pk)
+        for service in category_services:
+            services.append({'id': service.pk, 'title': service.title})
+    return JsonResponse(services, safe=False)
 
 @login_required
 def cancel_booking(request, booking_id):
