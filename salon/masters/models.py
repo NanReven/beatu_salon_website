@@ -60,6 +60,26 @@ class Users(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
 
+class Weekday(models.Model):
+    DAY_CHOICES = (
+        ('ПН', 'Понедельник'),
+        ('ВТ', 'Вторник'),
+        ('СР', 'Среда'),
+        ('ЧТ', 'Четверг'),
+        ('ПТ', 'Пятница'),
+        ('СБ', 'Суббота'),
+        ('ВС', 'Воскресенье'),
+    )
+    day = models.CharField(max_length=20, choices=DAY_CHOICES, unique=True)
+
+    def __str__(self):
+        return self.day
+
+    class Meta:
+        verbose_name = 'Выходной'
+        verbose_name_plural = 'Выходные'
+
+
 class Masters(models.Model):
     user: Users = models.OneToOneField(Users, on_delete=models.CASCADE, verbose_name='Пользователь')
     position = models.ForeignKey(Position,  on_delete=models.PROTECT, verbose_name='Должность')
@@ -68,6 +88,7 @@ class Masters(models.Model):
     photo = models.ImageField(verbose_name='Фотография', upload_to='images/')
     admission_date = models.DateField(verbose_name='Дата приема', auto_now_add=True)
     salary = models.DecimalField(verbose_name='Зарплата', max_digits=8, decimal_places=2)
+    weekend = models.ManyToManyField(Weekday, verbose_name='Выходные', limit_choices_to=2)
     slug = models.SlugField(verbose_name='URL', max_length=50, unique=True, db_index=True, blank=True)
 
     def __str__(self):

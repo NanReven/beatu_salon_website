@@ -40,7 +40,6 @@ def get_appointments(request):
         master = Masters.objects.filter(pk=request.GET.get('master'))[0]
     else:
         master = Masters.objects.filter(user=request.user)[0]
-
     appointments = Appointments.objects.filter(master=master, date=appointments_date, status='1')
     appointment_list = []
     for appointment in appointments:
@@ -56,7 +55,6 @@ def get_appointments(request):
 
 
 def get_master_services(request):
-    print('function')
     master = request.GET.get('master')
     categories = MasterCategory.objects.filter(master=master)
     services = []
@@ -65,6 +63,15 @@ def get_master_services(request):
         for service in category_services:
             services.append({'id': service.pk, 'title': service.title})
     return JsonResponse(services, safe=False)
+
+
+def get_master_weekends(request):
+    master = Masters.objects.get(pk=request.GET.get('master'))
+    weekends = []
+    for day in master.weekend.all():
+        weekends.append({'day': day.day})
+    return JsonResponse(weekends, safe=False)
+
 
 @login_required
 def cancel_booking(request, booking_id):
@@ -178,13 +185,25 @@ def logoutUser(request):
 def account(request):
     if request.user.is_customer:
         user_bookings = Appointments.objects.filter(user=request.user, date__gte=datetime.datetime.now().date())\
-            .filter(Q(status='1') | Q(status='2'))
-        user_bookings.order_by('date')
+            .filter(Q(status='1') | Q(status='2')).order_by('-date')
+        for book in user_bookings:
+            if book.date == datetime.datetime.now().date():
+                if book.time <= datetime.datetime.now().time():
+                    user_bookings.exclude(pk=book.pk)
+                    obj = Appointments.objects.get(pk=book.pk)
+                    obj.status = '0'
+                    obj.save()
         return render(request, 'main/user_account.html', {'user_bookings': user_bookings})
     else:
         master = Masters.objects.filter(user=request.user)[0]
         master_bookings = Appointments.objects.filter(master=master, status='2')
-        master_bookings.order_by('date').order_by('time')
+        for book in master_bookings:
+            if book.date == datetime.datetime.now().date():
+                if book.time <= datetime.datetime.now().time():
+                    master_bookings.exclude(pk=book.pk)
+                    obj = Appointments.objects.get(pk=book.pk)
+                    obj.status = '0'
+                    obj.save()
         return render(request, 'main/master_account.html', {'master_bookings': master_bookings})
 
 
@@ -276,6 +295,15 @@ def change_password(request):
         edit_form = ChangePasswordForm()
 
     return render(request, 'main/change_password.html', {'form': edit_form})
+
+
+def visits_history(request):
+    appointments = Appointments.objects.filter(user=request.user, status='1')
+    current_date = datetime.datetime.now().date()
+    for appointment in appointments:
+        if appointment.date >= current_date:
+            appointments = appointments.exclude(pk=appointment.pk)
+    return render(request, 'main/visits_history.html', {'appointments': appointments})
 
 
 def page_not_found(request, exception):
