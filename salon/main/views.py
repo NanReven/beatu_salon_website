@@ -1,4 +1,10 @@
 import datetime
+import random
+import string
+
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from openpyxl import Workbook
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model, logout
@@ -17,6 +23,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from main.tokens import account_activation_token
 from masters.models import Masters, Users
+from products.models import Cart, CartItem, Product
 from services.models import MasterCategory, Services
 from .forms import UserRegistrationForm, UserLoginForm, AppointmentsForm, ProfileEditForm, ChangePasswordForm
 from .models import Appointments
@@ -184,7 +191,7 @@ def logoutUser(request):
 @login_required
 def account(request):
     if request.user.is_customer:
-        user_bookings = Appointments.objects.filter(user=request.user, date__gte=datetime.datetime.now().date())\
+        user_bookings = Appointments.objects.filter(user=request.user, date__gte=datetime.datetime.now().date()) \
             .filter(Q(status='1') | Q(status='2')).order_by('-date')
         for book in user_bookings:
             if book.date == datetime.datetime.now().date():
@@ -297,6 +304,7 @@ def change_password(request):
     return render(request, 'main/change_password.html', {'form': edit_form})
 
 
+@login_required
 def visits_history(request):
     appointments = Appointments.objects.filter(user=request.user, status='1')
     current_date = datetime.datetime.now().date()
@@ -304,6 +312,139 @@ def visits_history(request):
         if appointment.date >= current_date:
             appointments = appointments.exclude(pk=appointment.pk)
     return render(request, 'main/visits_history.html', {'appointments': appointments})
+
+
+def excel_report(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "New Title"
+    ws['A1'] = 4
+    wb.save('test.xlsx')
+    print('saved?')
+    return redirect('account')
+
+
+def cart(request):
+    if not request.user.is_authenticated:
+        return render(request, 'main/cart.html')
+
+    if not Cart.objects.filter(user=request.user, status='pending').exists():
+        return render(request, 'main/cart.html')
+    else:
+        user_cart = Cart.objects.get(user=request.user, status='pending')
+    cart_items = CartItem.objects.filter(cart=user_cart)
+    prices = []
+    for item in cart_items:
+        product = Product.objects.get(pk=item.product.pk)
+        prices.append(product.price)
+
+    return render(request, 'main/cart.html', {'cart_items': zip(cart_items, prices)})
+
+
+@csrf_exempt
+def add_product(request):
+    if not request.user.is_authenticated:
+        print('here')
+        messages.error(request, 'please enter your account')
+        return JsonResponse('login', safe=False)
+
+    user_cart = Cart.objects.filter(user=request.user, status='pending').first()
+    if not user_cart:
+        user_cart = Cart.objects.create(user=request.user)
+    product_id = request.POST.get('product')
+
+    if CartItem.objects.filter(cart=user_cart, product_id=product_id).exists():
+        return JsonResponse("item is already here", safe=False)
+
+    cart_product = CartItem.objects.create(cart=user_cart, product_id=product_id)
+    cart_product.save()
+    return JsonResponse("Its ok", safe=False)
+
+
+def get_cart_items(request):
+    try:
+        user_cart = Cart.objects.get(user=request.user, status='pending')
+    except Cart.DoesNotExist:
+        return JsonResponse([], safe=False)
+    data = []
+    for item in CartItem.objects.filter(cart=user_cart):
+        data.append({'item_id': item.product.pk})
+    return JsonResponse(data, safe=False)
+
+
+@csrf_exempt
+def remove_cart_item(request):
+    product_id = request.POST.get('item')
+    user_cart = Cart.objects.get(user=request.user, status='pending')
+    CartItem.objects.get(cart=user_cart, product_id=product_id).delete()
+    return JsonResponse("Its ok", safe=False)
+
+
+def generate_unique_code():
+    code = ''
+    characters = string.ascii_letters + string.digits
+    for i in range(4):
+        code += random.choice(characters)
+
+    return code
+
+
+@csrf_exempt
+def reserve(request):
+    data = request.POST.get('quantity')
+    items = data[1:-1].split(",")
+    try:
+        user_cart = Cart.objects.get(user=request.user, status='pending')
+    except Cart.DoesNotExist:
+        return JsonResponse([], safe=False)
+
+    for item in items:
+        temp = item.split(":")
+        item_id = int(temp[0][1:-1])
+        item_quantity = int(temp[1])
+        cart_item = CartItem.objects.get(cart=user_cart, product=item_id)
+        cart_item.quantity = item_quantity
+        cart_item.save()
+
+        product = cart_item.product
+        product.quantity -= item_quantity
+        product.save()
+
+    user_cart.issue_code = generate_unique_code()
+    user_cart.status = 'ready'
+    user_cart.order_date = timezone.now()
+    user_cart.total_sum = float(request.POST.get('sum'))
+    user_cart.save()
+    messages.success(request, 'Everything is ok')
+    return JsonResponse("true", safe=False)
+
+
+@login_required
+def order_history(request):
+    user_orders = Cart.objects.filter(user=request.user)
+    orders_info = []
+
+    for order in user_orders:
+        order_info = {
+            'order': order,
+            'items': CartItem.objects.filter(cart=order)
+        }
+        orders_info.append(order_info)
+
+    return render(request, 'main/order_history.html', {'orders_info': orders_info})
+
+
+@csrf_exempt
+def cancel_order(request):
+    order_id = request.POST.get('order')
+    try:
+        user_cart = Cart.objects.get(pk=order_id)
+    except Cart.DoesNotExist:
+        return JsonResponse('error', safe=False)
+
+    user_cart.status = 'canceled'
+    user_cart.save()
+    return JsonResponse("cancel order", safe=False)
 
 
 def page_not_found(request, exception):

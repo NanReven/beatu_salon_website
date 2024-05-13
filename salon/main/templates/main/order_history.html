@@ -1,0 +1,73 @@
+{% extends 'main/main_layout.html' %}
+
+{% load static %}
+
+{% block title %}
+    History of Orders
+{% endblock %}
+
+{% block css_link %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-white">History of Orders</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+    <thead>
+        <tr class="text-white">
+            <th>Date</th>
+            <th>Status</th>
+            <th>Issue code</th>
+            <th>Products</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order_info in orders_info %}
+        <tr class="text-white">
+            <td>{{ order_info.order.order_date }}</td>
+            <td>{{ order_info.order.status }}</td>
+            <td>{{ order_info.order.issue_code }}</td>
+            <td>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_info.items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.product.price }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </td>
+            <td>{{ order_info.order.total_sum }}</td>
+            <td>
+                {% if order_info.order.status == 'ready' %}
+                <button class="btn btn-danger" onclick="cancelOrder('{{ order_info.order.pk }}')">Cancel</button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js_link %}
+    <script src="{% static 'main/js/order_history.js' %}"></script>
+{% endblock %}

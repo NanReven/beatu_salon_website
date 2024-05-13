@@ -1,0 +1,64 @@
+{% extends 'main/main_layout.html' %}
+
+{% load static %}
+
+{% block title %}
+    Корзина
+{% endblock %}
+
+{% block css_link %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+    {% if messages %}
+    <div class="alert alert-success" role="alert">
+        {% for message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="container">
+        <h2 class="text-white">Your Cart</h2>
+        <table class="table">
+            <thead>
+                <tr class="text-white">
+                    <th scope="col">Товар</th>
+                    <th scope="col">Цена</th>
+                    <th scope="col">Всего на складе</th>
+                    <th scope="col">Количество</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item, price in cart_items %}
+                <tr id="row_{{ item.pk }}" class="text-white">
+                    <td>{{ item.product }}</td>
+                    <td>{{ price }}</td>
+                    <td>
+                        <span id="amount_{{ item.product.pk }}">{{ item.product.quantity }}</span>
+                    </td>
+                    <td>
+                        <span id="quantity_{{ item.product.pk }}">{{ item.quantity }}</span>
+                    </td>
+                    <td>
+                        <button id="decrease_button" class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity({{ item.product.pk }})">-</button>
+                        <button id="increase_button" class="btn btn-outline-secondary" type="button" onclick="increaseQuantity({{ item.product.pk }})">+</button>
+                        <button class="btn btn-danger" onclick="removeFromCart('{{ item.product.pk }}')">Remove</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="text-white" id="total_price">Total: {{ total }}</p>
+        <button class="btn btn-primary" onclick="reserveCart()">Book Now</button>
+    </div>
+{% endblock %}
+
+{% block js_link %}
+    <script src="{% static 'main/js/cart.js' %}"></script>
+{% endblock %}
+
+
