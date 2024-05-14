@@ -24,16 +24,8 @@
     <div class="row gx-5">
         <div class="col-md-8">
             <h2 class="text-white">Запись на прием</h2>
-            <form method="post">
+            <form method="post" id="appointmentForm">
                 {% csrf_token %}
-                <div class="form-group">
-                    <label class="text-white">Дата</label>
-                    {{ form.date }}
-                </div>
-                <div class="form-group">
-                    <label class="text-white">Время начала</label>
-                    {{ form.time}}
-                </div>
                 <div class="form-group">
                     <label class="text-white">Мастер</label>
                     {{ form.master }}
@@ -41,6 +33,14 @@
                 <div class="form-group">
                     <label class="text-white">Услуга</label>
                     {{ form.service }}
+                </div>
+                <div class="form-group">
+                    <label class="text-white">Дата</label>
+                    {{ form.date }}
+                </div>
+                <div class="form-group">
+                    <label class="text-white">Время начала</label>
+                    {{ form.time}}
                 </div>
                 <div class="form-group">
                     <input type="submit" name="submit" class="btn btn-primary" value="Записаться">

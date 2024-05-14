@@ -129,3 +129,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
     selectedMaster.addEventListener('change', Handle);
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById('appointmentForm');
+    const masterField = form.elements['master'];
+    const serviceField = form.elements['service'];
+    const dateField = form.elements['date'];
+    const timeField = form.elements['time'];
+    const submitButton = form.elements['submit'];
+
+    // Initially disable all fields except the first one
+    serviceField.disabled = true;
+    dateField.disabled = true;
+    timeField.disabled = true;
+    submitButton.disabled = true;
+
+    // Enable the next field when the current one is filled
+    masterField.addEventListener('change', function() {
+        if (masterField.value !== '') {
+            serviceField.disabled = false;
+        } else {
+            serviceField.disabled = true;
+            serviceField.value = '';
+            dateField.disabled = true;
+            dateField.value = '';
+            timeField.disabled = true;
+            timeField.value = '';
+            submitButton.disabled = true;
+        }
+    });
+
+    serviceField.addEventListener('change', function() {
+        if (serviceField.value !== '') {
+            dateField.disabled = false;
+        } else {
+            dateField.disabled = true;
+            dateField.value = '';
+            timeField.disabled = true;
+            timeField.value = '';
+            submitButton.disabled = true;
+        }
+    });
+
+    dateField.addEventListener('input', function() {
+        if (dateField.value !== '') {
+            timeField.disabled = false;
+        } else {
+            timeField.disabled = true;
+            timeField.value = '';
+            submitButton.disabled = true;
+        }
+    });
+
+    timeField.addEventListener('input', function() {
+        if (timeField.value !== '') {
+            submitButton.disabled = false;
+        } else {
+            submitButton.disabled = true;
+        }
+    });
+});
