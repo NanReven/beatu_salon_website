@@ -40,7 +40,7 @@
                         <ul>
                             {% for booking in user_bookings %}
                                 <li>
-                                    Date: {{ booking.date }}, Time: {{ booking.time }}, Master: {{ booking.master }}, Service: {{ booking.service }}
+                                    Date: {{ booking.datetime }}, Master: {{ booking.master }}, Service: {{ booking.service }}
                                     <form action="{% url 'cancel_booking' booking.id %}" method="post" style="display: inline;">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger">Cancel</button>

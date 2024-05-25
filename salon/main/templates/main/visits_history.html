@@ -16,15 +16,17 @@
                         <th>Master</th>
                         <th>Service</th>
                         <th>Time</th>
+                        <th>Comment</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for appointment in appointments %}
                     <tr class="text-white">
-                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.datetime|date:"d/m/Y" }}</td>
                         <td>{{ appointment.master }}</td>
                         <td>{{ appointment.service }}</td>
-                        <td>{{ appointment.time }}</td>
+                        <td>{{ appointment.datetime|time:"H:i" }}</td>
+                        <td>{{ appointment.comment }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

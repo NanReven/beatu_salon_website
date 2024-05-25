@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // main calendar
 document.addEventListener('DOMContentLoaded', function () {
-    let dateInput = document.querySelector('#id_date');
+    let dateInput = document.querySelector('#id_datetime');
     let today = new Date();
     let mm = String(today.getMonth() + 1).padStart(2, '0');
     let yyyy = today.getFullYear();
@@ -64,32 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let currentDate = new Date(todayFormatted);
         if (selectedDate < currentDate) {
             this.value = todayFormatted;
-        }
-    });
-});
-
-// time picker
-document.addEventListener('DOMContentLoaded', function () {
-    let timeInput = document.querySelector('#id_time');
-
-    timeInput.addEventListener('change', function () {
-        let selectedTime = this.value.split(':');
-        let selectedHour = parseInt(selectedTime[0]);
-        let selectedMinute = parseInt(selectedTime[1]);
-        let minHour = 10;
-        let maxHour = 20;
-
-        if (selectedHour >= minHour && selectedHour <= maxHour) {
-            let roundedMinute = Math.round(selectedMinute / 15) * 15;
-            if (roundedMinute > 45) {
-                selectedHour += 1;
-                selectedMinute = 0;
-            } else {
-                selectedMinute = roundedMinute;
-            }
-            this.value = ('0' + selectedHour).slice(-2) + ':' + ('0' + selectedMinute).slice(-2);
-        } else {
-            this.value = ('0' + minHour).slice(-2) + ':00';
         }
     });
 });
@@ -123,26 +97,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function Handle() {
         $('.input-group.date').datepicker('update', '');
-        document.querySelector('#id_date').value = '';
+        document.querySelector('#id_datetime').value = '';
         getServices();
     }
 
     selectedMaster.addEventListener('change', Handle);
 });
 
-
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById('appointmentForm');
     const masterField = form.elements['master'];
     const serviceField = form.elements['service'];
-    const dateField = form.elements['date'];
-    const timeField = form.elements['time'];
+    const datetimeField = form.elements['datetime'];
+    const commentField = form.elements['comment'];
     const submitButton = form.elements['submit'];
 
     // Initially disable all fields except the first one
     serviceField.disabled = true;
-    dateField.disabled = true;
-    timeField.disabled = true;
+    datetimeField.disabled = true;
+    commentField.disabled = true;
     submitButton.disabled = true;
 
     // Enable the next field when the current one is filled
@@ -152,41 +125,39 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             serviceField.disabled = true;
             serviceField.value = '';
-            dateField.disabled = true;
-            dateField.value = '';
-            timeField.disabled = true;
-            timeField.value = '';
+            datetimeField.disabled = true;
+            datetimeField.value = '';
+            commentField.disabled = true;
+            commentField.value = '';
             submitButton.disabled = true;
         }
     });
 
     serviceField.addEventListener('change', function() {
         if (serviceField.value !== '') {
-            dateField.disabled = false;
+            datetimeField.disabled = false;
         } else {
-            dateField.disabled = true;
-            dateField.value = '';
-            timeField.disabled = true;
-            timeField.value = '';
+            datetimeField.disabled = true;
+            datetimeField.value = '';
+            commentField.disabled = true;
+            commentField.value = '';
             submitButton.disabled = true;
         }
     });
 
-    dateField.addEventListener('input', function() {
-        if (dateField.value !== '') {
-            timeField.disabled = false;
+    datetimeField.addEventListener('input', function() {
+        if (datetimeField.value !== '') {
+            commentField.disabled = false;
+            submitButton.disabled = false; // Enable submit button as datetime is filled
         } else {
-            timeField.disabled = true;
-            timeField.value = '';
+            commentField.disabled = true;
+            commentField.value = '';
             submitButton.disabled = true;
         }
     });
 
-    timeField.addEventListener('input', function() {
-        if (timeField.value !== '') {
-            submitButton.disabled = false;
-        } else {
-            submitButton.disabled = true;
-        }
+    commentField.addEventListener('input', function() {
+        // Comment field is optional, no need to check its value to enable submit button
     });
 });
+

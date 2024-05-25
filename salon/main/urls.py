@@ -19,7 +19,6 @@ urlpatterns = [
     path('account/change_password/', views.change_password, name='change_password'),
     path('account/visits_history/', views.visits_history, name='visits_history'),
     path('account/order_history/', views.order_history, name='order_history'),
-    path('account/excel_report/', views.excel_report, name='excel_report'),
     path('account/booking/', views.booking, name='booking'),
     path('account/booking/<int:booking_id>/accept/', views.accept_booking, name='accept_booking'),
     path('account/booking/<int:booking_id>/decline/', views.decline_booking, name='decline_booking'),

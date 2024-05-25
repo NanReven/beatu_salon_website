@@ -35,12 +35,12 @@
                     {{ form.service }}
                 </div>
                 <div class="form-group">
-                    <label class="text-white">Дата</label>
-                    {{ form.date }}
+                    <label class="text-white">Дата и время</label>
+                    {{ form.datetime }}
                 </div>
-                <div class="form-group">
-                    <label class="text-white">Время начала</label>
-                    {{ form.time}}
+                 <div class="form-group">
+                    <label class="text-white">Комментарий</label>
+                    {{ form.comment}}
                 </div>
                 <div class="form-group">
                     <input type="submit" name="submit" class="btn btn-primary" value="Записаться">
@@ -56,10 +56,9 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th class="text-white">Услуга</th>
-                        <th class="text-white">Заказчик</th>
-                        <th class="text-white">Дата</th>
-                        <th class="text-white">Время</th>
+                        <th>Услуга</th>
+                        <th>Время</th>
+                        <th>Длительность</th>
                     </tr>
                 </thead>
                 <tbody id="appointments-list">
@@ -76,6 +75,6 @@
     <link id="bsdp-css" href="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet">
     <script src="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
     <script src="https://unpkg.com/bootstrap-datepicker@1.9.0/dist/locales/bootstrap-datepicker.ru.min.js" charset="UTF-8"></script>
-    <script src="{% static 'main/js/schedule.js' %}"></script>
+    <script src="{% static 'main/js/booking_schedule.js' %}"></script>
     <script src="{% static 'main/js/booking.js' %}"></script>
 {% endblock %}

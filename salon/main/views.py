@@ -3,8 +3,8 @@ import random
 import string
 
 from django.utils import timezone
+from django.utils.timezone import localtime
 from django.views.decorators.csrf import csrf_exempt
-from openpyxl import Workbook
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, get_user_model, logout
@@ -44,19 +44,23 @@ def get_appointments(request):
                                       int(request.GET.get('day')))
 
     if not Masters.objects.filter(user=request.user).exists():
-        master = Masters.objects.filter(pk=request.GET.get('master'))[0]
+        master = Masters.objects.get(pk=request.GET.get('master'))
     else:
-        master = Masters.objects.filter(user=request.user)[0]
-    appointments = Appointments.objects.filter(master=master, date=appointments_date, status='1')
+        master = Masters.objects.get(user=request.user)
+
+    appointments = Appointments.objects.filter(master=master, status='1')
     appointment_list = []
     for appointment in appointments:
-        appointment_data = {
-            'date': appointment.date,
-            'time': appointment.time,
-            'service': appointment.service.title,
-            'user': appointment.user.first_name + ' ' + appointment.user.last_name,
-        }
-        appointment_list.append(appointment_data)
+        if appointment.datetime.date() == appointments_date:
+            local_datetime = localtime(appointment.datetime)
+            appointment_data = {
+                'service': appointment.service.title,
+                'time': local_datetime.time(),
+                'duration': appointment.service.duration,
+                'user': appointment.user.first_name + ' ' + appointment.user.last_name,
+                'comment': appointment.comment,
+            }
+            appointment_list.append(appointment_data)
 
     return JsonResponse(appointment_list, safe=False)
 
@@ -191,11 +195,11 @@ def logoutUser(request):
 @login_required
 def account(request):
     if request.user.is_customer:
-        user_bookings = Appointments.objects.filter(user=request.user, date__gte=datetime.datetime.now().date()) \
-            .filter(Q(status='1') | Q(status='2')).order_by('-date')
+        user_bookings = Appointments.objects.filter(user=request.user, datetime__gte=timezone.now()) \
+            .filter(Q(status='1') | Q(status='2')).order_by('-datetime')
         for book in user_bookings:
-            if book.date == datetime.datetime.now().date():
-                if book.time <= datetime.datetime.now().time():
+            if book.datetime.date() == datetime.datetime.now().date():
+                if book.datetime.time() <= datetime.datetime.now().time():
                     user_bookings.exclude(pk=book.pk)
                     obj = Appointments.objects.get(pk=book.pk)
                     obj.status = '0'
@@ -205,8 +209,8 @@ def account(request):
         master = Masters.objects.filter(user=request.user)[0]
         master_bookings = Appointments.objects.filter(master=master, status='2')
         for book in master_bookings:
-            if book.date == datetime.datetime.now().date():
-                if book.time <= datetime.datetime.now().time():
+            if book.datetime.date() == datetime.datetime.now().date():
+                if book.time <= datetime.datetime.now():
                     master_bookings.exclude(pk=book.pk)
                     obj = Appointments.objects.get(pk=book.pk)
                     obj.status = '0'
@@ -221,16 +225,15 @@ def booking(request):
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.user = request.user
-            appointment_time = datetime.timedelta(hours=appointment.time.hour, minutes=appointment.time.minute)
-            for master_appointment in Appointments.objects.filter(date=appointment.date, master=appointment.master,
+            for master_appointment in Appointments.objects.filter(datetime=appointment.datetime, master=appointment.master,
                                                                   status='1'):
-                appointment_end = datetime.timedelta(hours=master_appointment.time.hour,
-                                                     minutes=master_appointment.time.minute) + \
+                appointment_end = datetime.timedelta(hours=master_appointment.datetime.time().hour,
+                                                     minutes=master_appointment.datetime.time().minute) + \
                                   datetime.timedelta(hours=master_appointment.service.duration.hour,
                                                      minutes=master_appointment.service.duration.minute)
-                appointment_start = datetime.timedelta(hours=master_appointment.time.hour,
-                                                       minutes=master_appointment.time.minute)
-                if appointment_start <= appointment_time <= appointment_end:
+                appointment_start = datetime.timedelta(hours=master_appointment.datetime.time().hour,
+                                                       minutes=master_appointment.datetime.time().minute)
+                if appointment_start <= appointment.datetime.time() <= appointment_end:
                     messages.error(request, "Выбранное время уже занято.")
                     return render(request, 'main/booking.html', {'form': form})
 
@@ -307,21 +310,11 @@ def change_password(request):
 @login_required
 def visits_history(request):
     appointments = Appointments.objects.filter(user=request.user, status='1')
-    current_date = datetime.datetime.now().date()
+    current_date = timezone.now()
     for appointment in appointments:
-        if appointment.date >= current_date:
+        if appointment.datetime >= current_date:
             appointments = appointments.exclude(pk=appointment.pk)
     return render(request, 'main/visits_history.html', {'appointments': appointments})
-
-
-def excel_report(request):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "New Title"
-    ws['A1'] = 4
-    wb.save('test.xlsx')
-    print('saved?')
-    return redirect('account')
 
 
 def cart(request):
@@ -344,7 +337,6 @@ def cart(request):
 @csrf_exempt
 def add_product(request):
     if not request.user.is_authenticated:
-        print('here')
         messages.error(request, 'please enter your account')
         return JsonResponse('login', safe=False)
 

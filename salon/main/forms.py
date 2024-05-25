@@ -81,19 +81,13 @@ class UserRegistrationForm(ModelForm):
 class AppointmentsForm(forms.ModelForm):
     class Meta:
         model = Appointments
-        fields = ['date', 'time', 'master', 'service']
-        labels = {
-            'date': 'Дата',
-            'time': 'Время начала',
-            'master': 'Мастер',
-            'service': 'Услуга'
-        }
+        fields = ['datetime', 'master', 'service', 'comment']
+
         widgets = {
-            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'id': 'id_date'}),
-            'time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time', 'format': '%H:%M:%S',
-                                           'id': 'id_time'}),
+            'datetime': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
             'master': forms.Select(attrs={'class': 'form-control'}),
             'service': forms.Select(attrs={'class': 'form-control'}),
+            'comment': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
 
