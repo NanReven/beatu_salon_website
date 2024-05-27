@@ -84,7 +84,7 @@ class AppointmentsForm(forms.ModelForm):
         fields = ['datetime', 'master', 'service', 'comment']
 
         widgets = {
-            'datetime': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            'datetime': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local', 'id': 'datetimepicker12'}),
             'master': forms.Select(attrs={'class': 'form-control'}),
             'service': forms.Select(attrs={'class': 'form-control'}),
             'comment': forms.Textarea(attrs={'class': 'form-control'}),

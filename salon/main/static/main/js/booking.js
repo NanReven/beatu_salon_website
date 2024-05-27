@@ -1,8 +1,7 @@
-let master_days = [];
-
 //  master_days and datepicker
 document.addEventListener('DOMContentLoaded', function () {
     let master = document.getElementById("id_master");
+    let master_days = [];
 
     function getDaysOff() {
         $.ajax({
@@ -19,14 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     master_days.push(weekdays[resp.day]);
                 });
 
-                 $('.input-group.date').datepicker('destroy');
-                let new_options = {
-                    format: "dd/mm/yyyy",
-                    todayBtn: "linked",
-                    language: "ru",
-                    daysOfWeekDisabled: master_days,
-                };
-                $('.input-group.date').datepicker(new_options);
+                $('.input-group.date').datepicker('setDaysOfWeekDisabled', master_days);
+                $('#datetimepicker12').datetimepicker('setDaysOfWeekDisabled', master_days);
             },
             error: function (xhr, errmsg, err) {
                 console.log(errmsg);
@@ -34,38 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     master.addEventListener('change', getDaysOff);
-});
-
-// main calendar
-document.addEventListener('DOMContentLoaded', function () {
-    let dateInput = document.querySelector('#id_datetime');
-    let today = new Date();
-    let mm = String(today.getMonth() + 1).padStart(2, '0');
-    let yyyy = today.getFullYear();
-
-    let nextMonthDate = new Date();
-    nextMonthDate.setMonth(nextMonthDate.getMonth() + 1);
-    let nextMonthLastDate = new Date(nextMonthDate.getFullYear(), nextMonthDate.getMonth() + 1, 0);
-
-    let maxDate = nextMonthLastDate.getFullYear() + '-' + String(nextMonthLastDate.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-    let todayFormatted = yyyy + '-' + mm + '-' + String(today.getDate()).padStart(2, '0');
-
-    dateInput.setAttribute('min', todayFormatted);
-    dateInput.setAttribute('max', maxDate);
-    dateInput.addEventListener('change', function () {
-        let day = dateInput.valueAsDate.getDay();
-        master_days.forEach(function (master_day_off) {
-            if (day === master_day_off) {
-                dateInput.value = '';
-            }
-        });
-
-        let selectedDate = new Date(this.value);
-        let currentDate = new Date(todayFormatted);
-        if (selectedDate < currentDate) {
-            this.value = todayFormatted;
-        }
-    });
 });
 
 // master services
@@ -97,67 +58,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function Handle() {
         $('.input-group.date').datepicker('update', '');
-        document.querySelector('#id_datetime').value = '';
+        $('#datetimepicker12').val("");
+        $('#datetimepicker12').datetimepicker('update');
         getServices();
     }
 
     selectedMaster.addEventListener('change', Handle);
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.getElementById('appointmentForm');
-    const masterField = form.elements['master'];
-    const serviceField = form.elements['service'];
-    const datetimeField = form.elements['datetime'];
-    const commentField = form.elements['comment'];
-    const submitButton = form.elements['submit'];
-
-    // Initially disable all fields except the first one
-    serviceField.disabled = true;
-    datetimeField.disabled = true;
-    commentField.disabled = true;
-    submitButton.disabled = true;
-
-    // Enable the next field when the current one is filled
-    masterField.addEventListener('change', function() {
-        if (masterField.value !== '') {
-            serviceField.disabled = false;
-        } else {
-            serviceField.disabled = true;
-            serviceField.value = '';
-            datetimeField.disabled = true;
-            datetimeField.value = '';
-            commentField.disabled = true;
-            commentField.value = '';
-            submitButton.disabled = true;
-        }
+document.addEventListener('DOMContentLoaded', function () {
+     $('.input-group.date').datepicker( {
+         format: "dd/mm/yyyy",
+         language: "ru",
+     });
+     let now = new Date();
+     let oneMonthLater = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+    $('#datetimepicker12').datetimepicker( {
+        formatViewType: 'date',
+        autoclose: true,
+        minuteStep: 15,
+        language: 'ru',
+        weekStart: 1,
+        startDate: now,
+        endDate: oneMonthLater
     });
-
-    serviceField.addEventListener('change', function() {
-        if (serviceField.value !== '') {
-            datetimeField.disabled = false;
-        } else {
-            datetimeField.disabled = true;
-            datetimeField.value = '';
-            commentField.disabled = true;
-            commentField.value = '';
-            submitButton.disabled = true;
-        }
-    });
-
-    datetimeField.addEventListener('input', function() {
-        if (datetimeField.value !== '') {
-            commentField.disabled = false;
-            submitButton.disabled = false; // Enable submit button as datetime is filled
-        } else {
-            commentField.disabled = true;
-            commentField.value = '';
-            submitButton.disabled = true;
-        }
-    });
-
-    commentField.addEventListener('input', function() {
-        // Comment field is optional, no need to check its value to enable submit button
-    });
+    $('#datetimepicker12').datetimepicker('setHoursDisabled', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 21, 22, 23]);
 });
-
