@@ -16,7 +16,7 @@
                 <h2>{{ service.title }}</h2>
                 <p>Длительность: {{ service.duration }}</p>
                 <p>Цена: {{ service.cost }}</p>
-                </div>
+                <p>Цена: {{ service.description|linebreaksbr }}</p>
         </div>
     </div>
 {% endblock %}

@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 $('.input-group.date').datepicker('setDaysOfWeekDisabled', master_days);
-                $('#datetimepicker12').datetimepicker('setDaysOfWeekDisabled', master_days);
+                $('#id_datetime').datetimepicker('setDaysOfWeekDisabled', master_days);
             },
             error: function (xhr, errmsg, err) {
                 console.log(errmsg);
@@ -58,8 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function Handle() {
         $('.input-group.date').datepicker('update', '');
-        $('#datetimepicker12').val("");
-        $('#datetimepicker12').datetimepicker('update');
+        $('#id_datetime').val("");
+        $('#id_datetime').datetimepicker('update');
+        $('#booking_info').text(`Стоимость: 0 руб. Длительность: 0 мин.`);
         getServices();
     }
 
@@ -73,14 +74,41 @@ document.addEventListener('DOMContentLoaded', function () {
      });
      let now = new Date();
      let oneMonthLater = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
-    $('#datetimepicker12').datetimepicker( {
+    $('#id_datetime').datetimepicker( {
         formatViewType: 'date',
         autoclose: true,
         minuteStep: 15,
         language: 'ru',
         weekStart: 1,
         startDate: now,
-        endDate: oneMonthLater
+        endDate: oneMonthLater,
     });
-    $('#datetimepicker12').datetimepicker('setHoursDisabled', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 21, 22, 23]);
+    $('#id_datetime').datetimepicker('setHoursDisabled', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 21, 22, 23]);
+});
+
+$(document).ready(function() {
+    $('#id_service').select2();
+    $('#id_service').select2().on('change', function() {
+        let services_id = $('#id_service').val();
+        if (services_id.length === 0) {
+             $('#booking_info').text(`Стоимость: 0 руб. Длительность: 0 мин.`);
+        } else {
+            $.ajax({
+                url: "/get_service_details/",
+                type: "GET",
+                data: {
+                    services: JSON.stringify(services_id),
+                },
+                dataType: "json",
+                success: function (response) {
+                   const minutes = response.minutes;
+                   const cost = response.cost;
+                   $('#booking_info').text(`Стоимость: ${cost} руб. Длительность: ${minutes} мин.`);
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(errmsg);
+                }
+            });
+        }
+    });
 });

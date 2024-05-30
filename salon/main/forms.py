@@ -1,8 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
+from services.models import Services
 from .models import Users
 from .models import Appointments
 from django.forms import ModelForm
@@ -79,15 +80,21 @@ class UserRegistrationForm(ModelForm):
 
 
 class AppointmentsForm(forms.ModelForm):
+    services = forms.ModelMultipleChoiceField(
+        queryset=Services.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'form-control', 'id': 'id_service'}),
+        required=True
+    )
+
     class Meta:
         model = Appointments
-        fields = ['datetime', 'master', 'service', 'comment']
+        fields = ['start_datetime', 'master', 'comment', 'services']
 
         widgets = {
-            'datetime': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local', 'id': 'datetimepicker12'}),
+            'start_datetime': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local',
+                                                   'id': 'id_datetime'}),
             'master': forms.Select(attrs={'class': 'form-control'}),
-            'service': forms.Select(attrs={'class': 'form-control'}),
-            'comment': forms.Textarea(attrs={'class': 'form-control'}),
+            'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
 
 
@@ -122,3 +129,10 @@ class ChangePasswordForm(forms.Form):
             raise forms.ValidationError(str(e))
         return new_password
 
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        max_length=254,
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Введите ваш email'}),
+        label='Электронная почта'
+    )

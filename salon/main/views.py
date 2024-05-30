@@ -26,7 +26,7 @@ from masters.models import Masters, Users
 from products.models import Cart, CartItem, Product
 from services.models import MasterCategory, Services
 from .forms import UserRegistrationForm, UserLoginForm, AppointmentsForm, ProfileEditForm, ChangePasswordForm
-from .models import Appointments
+from .models import Appointments, AppointmentService
 
 
 def index(request):
@@ -70,7 +70,7 @@ def get_master_services(request):
     categories = MasterCategory.objects.filter(master=master)
     services = []
     for category in categories:
-        category_services = Services.objects.filter(category=category.pk)
+        category_services = Services.objects.filter(category=category.category)
         for service in category_services:
             services.append({'id': service.pk, 'title': service.title})
     return JsonResponse(services, safe=False)
@@ -82,6 +82,19 @@ def get_master_weekends(request):
     for day in master.weekend.all():
         weekends.append({'day': day.day})
     return JsonResponse(weekends, safe=False)
+
+
+def get_service_details(request):
+    ids = request.GET.get('services')[1:-1].split(",")
+    total_cost = 0
+    total_min = 0
+    for temp in ids:
+        service_id = int(temp[1:-1])
+        service = Services.objects.get(pk=service_id)
+        total_cost += service.cost
+        total_min += service.duration.minute + service.duration.hour * 60
+
+    return JsonResponse({'minutes': total_min, 'cost': total_cost}, safe=False)
 
 
 @login_required
@@ -195,11 +208,11 @@ def logoutUser(request):
 @login_required
 def account(request):
     if request.user.is_customer:
-        user_bookings = Appointments.objects.filter(user=request.user, datetime__gte=timezone.now()) \
-            .filter(Q(status='1') | Q(status='2')).order_by('-datetime')
+        user_bookings = Appointments.objects.filter(user=request.user, start_datetime__gte=timezone.now()) \
+            .filter(Q(status='1') | Q(status='2')).order_by('-start_datetime')
         for book in user_bookings:
-            if book.datetime.date() == datetime.datetime.now().date():
-                if book.datetime.time() <= datetime.datetime.now().time():
+            if book.start_datetime.date() == datetime.datetime.now().date():
+                if book.start_datetime.time() <= datetime.datetime.now().time():
                     user_bookings.exclude(pk=book.pk)
                     obj = Appointments.objects.get(pk=book.pk)
                     obj.status = '0'
@@ -223,21 +236,21 @@ def booking(request):
     if request.method == 'POST':
         form = AppointmentsForm(request.POST)
         if form.is_valid():
-            appointment = form.save(commit=False)
-            appointment.user = request.user
-            for master_appointment in Appointments.objects.filter(datetime=appointment.datetime, master=appointment.master,
-                                                                  status='1'):
-                appointment_end = datetime.timedelta(hours=master_appointment.datetime.time().hour,
-                                                     minutes=master_appointment.datetime.time().minute) + \
-                                  datetime.timedelta(hours=master_appointment.service.duration.hour,
-                                                     minutes=master_appointment.service.duration.minute)
-                appointment_start = datetime.timedelta(hours=master_appointment.datetime.time().hour,
-                                                       minutes=master_appointment.datetime.time().minute)
-                if appointment_start <= appointment.datetime.time() <= appointment_end:
-                    messages.error(request, "Выбранное время уже занято.")
-                    return render(request, 'main/booking.html', {'form': form})
+            user_appointment = form.save(commit=False)
+            user_appointment.user = request.user
+            user_appointment.save()
+            total_duration = datetime.timedelta()
+            total_sum = 0
+            for appointment_service in form.cleaned_data['services']:
+                user_service = AppointmentService.objects.create(appointment=user_appointment, service=appointment_service)
+                user_service.save()
+                total_sum += user_service.service.cost
+                total_duration += datetime.timedelta(hours=appointment_service.duration.hour, minutes=appointment_service.duration.minute)
 
-            appointment.save()
+            user_appointment.total_sum = total_sum
+            user_appointment.end_datetime = user_appointment.start_datetime + total_duration
+            user_appointment.save()
+            messages.success(request, 'yes')
             return redirect('account')
     else:
         form = AppointmentsForm()
@@ -437,6 +450,10 @@ def cancel_order(request):
     user_cart.status = 'canceled'
     user_cart.save()
     return JsonResponse("cancel order", safe=False)
+
+
+def password_reset(request):
+    return redirect('home_page')
 
 
 def page_not_found(request, exception):

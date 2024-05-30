@@ -19,13 +19,16 @@ class MasterCategory(models.Model):
     master = models.ForeignKey(Masters, on_delete=models.PROTECT, null=True, verbose_name='Мастер')
     category = models.ForeignKey(Categories, on_delete=models.PROTECT, null=True, verbose_name='Категория')
 
+    def __str__(self):
+        return self.master.user.last_name + ' ' + self.category.title
+
     class Meta:
         verbose_name = 'Категории мастеров'
         verbose_name_plural = 'Категории мастеров'
 
 
 class Services(models.Model):
-    title = models.CharField(verbose_name='Название', max_length=20)
+    title = models.CharField(verbose_name='Название', max_length=100)
     category = models.ForeignKey(Categories, on_delete=models.PROTECT, null=True, verbose_name='Категория')
     description = models.TextField(verbose_name='Описание')
     duration = models.TimeField(verbose_name='Длительность')

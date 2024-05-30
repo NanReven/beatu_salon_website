@@ -70,7 +70,7 @@ class Weekday(models.Model):
         ('СБ', 'Суббота'),
         ('ВС', 'Воскресенье'),
     )
-    day = models.CharField(max_length=20, choices=DAY_CHOICES, unique=True)
+    day = models.CharField(max_length=20, choices=DAY_CHOICES, unique=True, verbose_name='День недели')
 
     def __str__(self):
         return self.day
@@ -86,8 +86,6 @@ class Masters(models.Model):
     short_description = models.CharField(verbose_name='Краткая информация', max_length=200)
     full_description = models.TextField(verbose_name='Полная информация')
     photo = models.ImageField(verbose_name='Фотография', upload_to='images/')
-    admission_date = models.DateField(verbose_name='Дата приема', auto_now_add=True)
-    salary = models.DecimalField(verbose_name='Зарплата', max_digits=8, decimal_places=2)
     weekend = models.ManyToManyField(Weekday, verbose_name='Выходные', limit_choices_to=2)
     slug = models.SlugField(verbose_name='URL', max_length=50, unique=True, db_index=True, blank=True)
 
