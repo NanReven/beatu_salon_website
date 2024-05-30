@@ -130,9 +130,5 @@ class ChangePasswordForm(forms.Form):
         return new_password
 
 
-class CustomPasswordResetForm(PasswordResetForm):
-    email = forms.EmailField(
-        max_length=254,
-        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Введите ваш email'}),
-        label='Электронная почта'
-    )
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label='Электронная почта', max_length=254)

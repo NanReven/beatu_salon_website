@@ -2,7 +2,10 @@ import datetime
 import random
 import string
 
+from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
+from django.utils.html import strip_tags
 from django.utils.timezone import localtime
 from django.views.decorators.csrf import csrf_exempt
 
@@ -11,9 +14,9 @@ from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import send_mail
+from django.core.mail import send_mail, BadHeaderError
 from django.db.models import Q
-from django.http import HttpResponseNotFound, JsonResponse
+from django.http import HttpResponseNotFound, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.templatetags.static import static
@@ -24,8 +27,10 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from main.tokens import account_activation_token
 from masters.models import Masters, Users
 from products.models import Cart, CartItem, Product
+from salon import settings
 from services.models import MasterCategory, Services
-from .forms import UserRegistrationForm, UserLoginForm, AppointmentsForm, ProfileEditForm, ChangePasswordForm
+from .forms import UserRegistrationForm, UserLoginForm, AppointmentsForm, ProfileEditForm, ChangePasswordForm, \
+ PasswordResetRequestForm
 from .models import Appointments, AppointmentService
 
 
@@ -51,8 +56,8 @@ def get_appointments(request):
     appointments = Appointments.objects.filter(master=master, status='1')
     appointment_list = []
     for appointment in appointments:
-        if appointment.datetime.date() == appointments_date:
-            local_datetime = localtime(appointment.datetime)
+        if appointment.start_datetime.date() == appointments_date:
+            local_datetime = localtime(appointment.start_datetime)
             appointment_data = {
                 'service': appointment.service.title,
                 'time': local_datetime.time(),
@@ -102,7 +107,18 @@ def cancel_booking(request, booking_id):
     appointment = Appointments.objects.get(pk=booking_id)
     appointment.status = '0'
     appointment.save()
-    messages.success(request, 'Ваш успешно')
+
+    # Отправка письма мастеру
+    master_email = appointment.master.user.email
+    subject = 'Отмена заявки'
+    context = {
+        'appointment': appointment,
+    }
+    html_message = render_to_string('main/appointment_cancellation.html', context)
+    plain_message = strip_tags(html_message)
+    send_mail(subject, plain_message, 'nanreven@yandex.ru', [master_email], html_message=html_message)
+
+    messages.success(request, 'Ваше бронирование было успешно отменено.')
     return redirect('account')
 
 
@@ -222,7 +238,7 @@ def account(request):
         master = Masters.objects.filter(user=request.user)[0]
         master_bookings = Appointments.objects.filter(master=master, status='2')
         for book in master_bookings:
-            if book.datetime.date() == datetime.datetime.now().date():
+            if book.start_datetime.date() == datetime.datetime.now().date():
                 if book.time <= datetime.datetime.now():
                     master_bookings.exclude(pk=book.pk)
                     obj = Appointments.objects.get(pk=book.pk)
@@ -242,15 +258,29 @@ def booking(request):
             total_duration = datetime.timedelta()
             total_sum = 0
             for appointment_service in form.cleaned_data['services']:
-                user_service = AppointmentService.objects.create(appointment=user_appointment, service=appointment_service)
+                user_service = AppointmentService.objects.create(appointment=user_appointment,
+                                                                 service=appointment_service)
                 user_service.save()
                 total_sum += user_service.service.cost
-                total_duration += datetime.timedelta(hours=appointment_service.duration.hour, minutes=appointment_service.duration.minute)
+                total_duration += datetime.timedelta(hours=appointment_service.duration.hour,
+                                                     minutes=appointment_service.duration.minute)
 
             user_appointment.total_sum = total_sum
             user_appointment.end_datetime = user_appointment.start_datetime + total_duration
             user_appointment.save()
-            messages.success(request, 'yes')
+            # Отправка письма мастеру
+            master_email = user_appointment.master.user.email
+            subject = 'Новая заявка на бронирование'
+            context = {
+                'master': user_appointment.master.user,
+                'appointment': user_appointment,
+                'user': request.user,
+            }
+            html_message = render_to_string('main/appointment_notification.html', context)
+            plain_message = strip_tags(html_message)
+            send_mail(subject, plain_message, 'nanreven@yandex.ru', [master_email], html_message=html_message)
+
+            messages.success(request, 'Заявка успешно создана и мастер уведомлен.')
             return redirect('account')
     else:
         form = AppointmentsForm()
@@ -265,6 +295,19 @@ def accept_booking(request, booking_id):
         bid = Appointments.objects.get(id=booking_id)
         bid.status = '1'
         bid.save()
+
+        # Отправка письма пользователю
+        user_email = bid.user.email
+        subject = 'Обновление статуса заявки'
+        context = {
+            'user': bid.user,
+            'appointment': bid,
+            'status': 'принято',
+        }
+        html_message = render_to_string('main/appointment_status_update.html', context)
+        plain_message = strip_tags(html_message)
+        send_mail(subject, plain_message, 'nanreven@yandex.ru', [user_email], html_message=html_message)
+
     return redirect('account')
 
 
@@ -274,6 +317,19 @@ def decline_booking(request, booking_id):
         bid = Appointments.objects.get(id=booking_id)
         bid.status = '0'
         bid.save()
+
+        # Отправка письма пользователю
+        user_email = bid.user.email
+        subject = 'Обновление статуса заявки'
+        context = {
+            'user': bid.user,
+            'appointment': bid,
+            'status': 'отклонено',
+        }
+        html_message = render_to_string('main/appointment_status_update.html', context)
+        plain_message = strip_tags(html_message)
+        send_mail(subject, plain_message, 'nanreven@yandex.ru', [user_email], html_message=html_message)
+
     return redirect('account')
 
 
@@ -452,8 +508,51 @@ def cancel_order(request):
     return JsonResponse("cancel order", safe=False)
 
 
-def password_reset(request):
-    return redirect('home_page')
+def password_reset_request(request):
+    if request.method == "POST":
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            associated_users = Users.objects.filter(email=email)
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Запрос на сброс пароля"
+                    email_template_name = "main/password_reset_email.html"
+                    context = {
+                        "email": user.email,
+                        'domain': get_current_site(request).domain,
+                        'site_name': 'Kontinental',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, context)
+                    send_mail(subject, email, 'nanreven@yandex.ru', [user.email], fail_silently=False)
+                return redirect("/password_reset/done/")
+    else:
+        form = PasswordResetRequestForm()
+    return render(request, "main/password_reset_form.html", {"form": form})
+
+
+def password_reset_confirm(request, uidb64=None, token=None):
+    if uidb64 is not None and token is not None:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        try:
+            user = Users.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, Users.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            if request.method == 'POST':
+                form = SetPasswordForm(user, request.POST)
+                if form.is_valid():
+                    form.save()
+                    return redirect('/reset/done/')
+            else:
+                form = SetPasswordForm(user)
+            return render(request, 'main/password_reset_confirm.html', {'form': form})
+    return redirect('/password_reset/')
 
 
 def page_not_found(request, exception):
