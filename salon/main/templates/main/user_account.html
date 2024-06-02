@@ -32,6 +32,31 @@
         </div>
     </div>
 
+    <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Salon Visit History
+                </div>
+                <div class="card-body">
+                    {% if user_bookings %}
+                        <ul>
+                            {% for booking in user_bookings %}
+                                <li>
+                                    Date: {{ booking.start_datetime }}, Master: {{ booking.master }}, Service: {{ booking.service }}
+                                    <form action="{% url 'cancel_booking' booking.id %}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Cancel</button>
+                                    </form>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No salon visit history available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
     <div class="row mt-4">
         <div class="col-md-12">
             <a href="{% url 'logout' %}" class="btn btn-danger">Log Out</a>

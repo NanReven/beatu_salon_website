@@ -1,8 +1,70 @@
 .master-details {
-  margin-top: 50px;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.master-photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border: 5px solid #fff; /* Optional border */
 }
 
 .master-photo {
-  max-width: 100%;
-  height: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.service-card {
+    background-color: #343a40;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.service-card .card-body {
+    color: #fff;
+    flex-grow: 1;
+}
+
+.service-card .card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.service-card .card-text {
+    margin-bottom: 0.25rem;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-outline-light {
+    color: #fff;
+    border-color: #fff;
+}
+
+.btn-outline-light:hover {
+    background-color: #fff;
+    color: #343a40;
 }

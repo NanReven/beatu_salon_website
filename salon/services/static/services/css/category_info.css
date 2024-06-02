@@ -1,41 +1,56 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 20px;
-    text-align: center;
+    padding: 0;
+    background-color: #343a40; /* Dark background for better contrast */
 }
 
-.category-services {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: left;
+.container {
+    margin-top: 50px;
 }
 
-.category-services h1 {
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-
-.services-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+.text-white {
+    color: #fff;
 }
 
 .service-card {
-    max-width: 300px;
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    background-color: #495057; /* Dark card background */
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    word-break: keep-all; /* Prevent word breaking */
+    max-width: 280px; /* Reduce card size */
+    margin: auto;
 }
 
-.service-card h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
+.service-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.service-card p {
-    font-size: 1.2em;
-    color: #555;
+.service-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #f8f9fa; /* Lighter text color */
+}
+
+.service-card .card-title {
+    font-size: 1.25rem; /* Reduce font size */
+    margin-bottom: 0.5rem;
+}
+
+.service-card .card-text {
+    font-size: 1rem; /* Reduce font size */
+    margin-bottom: 0.5rem;
+    color: #dee2e6; /* Slightly lighter text color */
+}
+
+.btn-outline-light {
+    color: #fff;
+    border-color: #fff;
+}
+
+.btn-outline-light:hover {
+    background-color: #fff;
+    color: #343a40;
 }

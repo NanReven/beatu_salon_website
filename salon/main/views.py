@@ -14,9 +14,9 @@ from django.contrib.auth import authenticate, login, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import send_mail, BadHeaderError
+from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponseNotFound, JsonResponse, HttpResponse
+from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.templatetags.static import static
@@ -27,10 +27,9 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from main.tokens import account_activation_token
 from masters.models import Masters, Users
 from products.models import Cart, CartItem, Product
-from salon import settings
 from services.models import MasterCategory, Services
 from .forms import UserRegistrationForm, UserLoginForm, AppointmentsForm, ProfileEditForm, ChangePasswordForm, \
- PasswordResetRequestForm
+    PasswordResetRequestForm
 from .models import Appointments, AppointmentService
 
 
@@ -57,13 +56,15 @@ def get_appointments(request):
     appointment_list = []
     for appointment in appointments:
         if appointment.start_datetime.date() == appointments_date:
-            local_datetime = localtime(appointment.start_datetime)
+            services = AppointmentService.objects.filter(appointment=appointment.pk).values('service__title',
+                                                                                            'service__duration')
             appointment_data = {
-                'service': appointment.service.title,
-                'time': local_datetime.time(),
-                'duration': appointment.service.duration,
-                'user': appointment.user.first_name + ' ' + appointment.user.last_name,
+                'user': f"{appointment.user.first_name} {appointment.user.last_name}",
+                'start': localtime(appointment.start_datetime).strftime('%H:%M'),
+                'end': localtime(appointment.end_datetime).strftime('%H:%M'),
                 'comment': appointment.comment,
+                'cost': appointment.total_sum,
+                'services': list(services)
             }
             appointment_list.append(appointment_data)
 
@@ -228,6 +229,7 @@ def account(request):
             .filter(Q(status='1') | Q(status='2')).order_by('-start_datetime')
         for book in user_bookings:
             if book.start_datetime.date() == datetime.datetime.now().date():
+                # booking is outdated
                 if book.start_datetime.time() <= datetime.datetime.now().time():
                     user_bookings.exclude(pk=book.pk)
                     obj = Appointments.objects.get(pk=book.pk)
@@ -252,22 +254,39 @@ def booking(request):
     if request.method == 'POST':
         form = AppointmentsForm(request.POST)
         if form.is_valid():
-            user_appointment = form.save(commit=False)
-            user_appointment.user = request.user
-            user_appointment.save()
-            total_duration = datetime.timedelta()
+            # check availability
+            appointment_master = form.cleaned_data['master']
+            appointment_start = timezone.localtime(form.cleaned_data['start_datetime'])
+            duration = datetime.timedelta()
             total_sum = 0
             for appointment_service in form.cleaned_data['services']:
-                user_service = AppointmentService.objects.create(appointment=user_appointment,
-                                                                 service=appointment_service)
-                user_service.save()
-                total_sum += user_service.service.cost
-                total_duration += datetime.timedelta(hours=appointment_service.duration.hour,
-                                                     minutes=appointment_service.duration.minute)
+                duration += datetime.timedelta(hours=appointment_service.duration.hour, minutes=appointment_service.duration.minute)
+                total_sum += appointment_service.cost
 
+            appointment_end = appointment_start + duration
+            overlapping_appointments = Appointments.objects.filter(
+                master=appointment_master,
+                status='1',
+                start_datetime__date=appointment_start.date()
+            ).filter(
+                Q(start_datetime__lte=appointment_start, end_datetime__gte=appointment_start) |
+                Q(start_datetime__lte=appointment_end, end_datetime__gte=appointment_end) |
+                Q(start_datetime__gte=appointment_start, end_datetime__lte=appointment_end)
+            )
+
+            if overlapping_appointments.exists():
+                messages.error(request, 'Мастер занят в это время.')
+                return redirect('booking')
+
+            # save appointment
+            user_appointment = form.save(commit=False)
+            user_appointment.user = request.user
+            user_appointment.end_datetime = appointment_end
             user_appointment.total_sum = total_sum
-            user_appointment.end_datetime = user_appointment.start_datetime + total_duration
             user_appointment.save()
+            for appointment_service in form.cleaned_data['services']:
+                AppointmentService.objects.create(appointment=user_appointment, service=appointment_service)
+
             # Отправка письма мастеру
             master_email = user_appointment.master.user.email
             subject = 'Новая заявка на бронирование'
@@ -379,9 +398,8 @@ def change_password(request):
 @login_required
 def visits_history(request):
     appointments = Appointments.objects.filter(user=request.user, status='1')
-    current_date = timezone.now()
     for appointment in appointments:
-        if appointment.datetime >= current_date:
+        if appointment.start_datetime >= timezone.now():
             appointments = appointments.exclude(pk=appointment.pk)
     return render(request, 'main/visits_history.html', {'appointments': appointments})
 

@@ -26,14 +26,13 @@ $(document).ready(function() {
             if (response.length > 0) {
                 response.forEach(function(appointment) {
                     let row = '<tr>';
-                    row += '<td>' + appointment.service + '</td>';
-                    row += '<td>' + appointment.time + '</td>';
-                    row += '<td>' + appointment.duration + '</td>';
+                    row += '<td>' + appointment.start + '</td>';
+                    row += '<td>' + appointment.end + '</td>';
                     row += '</tr>';
                     $('#appointments-list').append(row);
                 });
             } else {
-                $('#appointments-list').append('<tr><td colspan="3">Нет заявок</td></tr>');
+                $('#appointments-list').append('<tr><td colspan="2">Нет заявок</td></tr>');
             }
         },
             error: function(xhr, errmsg, err) {

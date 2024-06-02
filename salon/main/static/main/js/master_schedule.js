@@ -26,17 +26,31 @@ $(document).ready(function() {
             if (response.length > 0) {
                 response.forEach(function(appointment) {
                     let row = '<tr>';
-                    row += '<td>' + appointment.service + '</td>';
                     row += '<td>' + appointment.user + '</td>';
-                    row += '<td>' + appointment.time + '</td>';
-                    row += '<td>' + appointment.duration + '</td>';
+                    row += '<td>';
+                    row += '<table class="table table-sm">';
+                    row += '<thead><tr><th>Услуга</th><th>Длительность</th></tr></thead>';
+                    row += '<tbody>';
+                    appointment.services.forEach(function(service) {
+                        row += '<tr>';
+                        row += '<td>' + service.service__title + '</td>';
+                        row += '<td>' + service.service__duration + '</td>';
+                        row += '</tr>';
+                    });
+                    row += '</tbody>';
+                    row += '</table>';
+                    row += '</td>';
+                    row += '<td>' + appointment.start + '</td>';
+                    row += '<td>' + appointment.end + '</td>';
                     row += '<td>' + appointment.comment + '</td>';
+                    row += '<td>' + appointment.cost + '</td>';
                     row += '</tr>';
                     $('#appointments-list').append(row);
                 });
             } else {
-                $('#appointments-list').append('<tr><td colspan="5" class="text-center">Нет заявок</td></tr>');
+                $('#appointments-list').append('<tr><td colspan="6" class="text-center">Нет заявок</td></tr>');
             }
+
         },
             error: function(xhr, errmsg, err) {
                 console.log(errmsg);

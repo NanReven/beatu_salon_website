@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    {{master.user.first_name}} {{master.user.last_name}}
+    {{ master.user.first_name }} {{ master.user.last_name }}
 {% endblock %}
 
 {% block css_link %}
@@ -12,27 +12,39 @@
 
 {% block content %}
     <div class="container">
-      <div class="row justify-content-center master-details">
-        <div class="col-md-8">
-          <img src="{{ master.photo.url }}" alt="Master Photo" class="img-fluid rounded master-photo">
-          <h2 class="mt-3 text-white">{{ master.user.first_name }} {{ master.user.last_name }}</h2>
-
-          <p class="text-white">{{ master.full_description|linebreaksbr }}</p>
-
-          <h3 class="text-white">Services:</h3>
-          <ul class="text-white">
-            <li>Haircut and Styling</li>
-            <li>Hair Coloring</li>
-            <li>Extensions</li>
-            <li>Special Occasion Styling</li>
-          </ul>
+        <div class="row justify-content-center master-details">
+            <div class="col-md-8 text-center">
+                <div class="master-photo-container mb-3">
+                    <img src="{{ master.photo.url }}" alt="Master Photo" class="img-fluid rounded master-photo">
+                </div>
+                <h2 class="mt-3 text-white">{{ master.user.first_name }} {{ master.user.last_name }}</h2>
+                <p class="text-white text-left">{{ master.full_description|linebreaksbr }}</p>
+            </div>
         </div>
-      </div>
-        <div class="row">
-            <div class="col-12">
-                <a href="{%url 'booking' %}" class="btn btn-lg text-uppercase centered">Get master</a>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <h3 class="text-white">Услуги:</h3>
+                <div class="row">
+                    {% for service in services %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card service-card h-100">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">{{ service.title }}</h5>
+                                    <p class="card-text">Длительность: {{ service.duration }}</p>
+                                    <p class="card-text">Стоимость: {{ service.cost }} руб.</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-4 text-center">
+                <a href="{% url 'booking' %}" class="btn btn-lg btn-primary text-uppercase">Записаться к мастеру</a>
             </div>
         </div>
     </div>
-
 {% endblock %}

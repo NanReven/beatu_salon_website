@@ -7,12 +7,23 @@
     transform: scale(1.05);
 }
 
-.card-link:hover .master-name {
-    display: block;
-}
-
 .master-image {
     width: 100%; /* Ensure the image takes up the full width of the card */
     height: 200px; /* Adjust the height as needed */
     object-fit: cover; /* Maintain aspect ratio and cover the entire container */
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-body .flex-grow-1 {
+    flex-grow: 1;
 }
