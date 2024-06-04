@@ -48,10 +48,16 @@ ul a:hover {
 
 .main-header {
 	color: white;
-	position: absolute; /* or absolute */
+	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
+	font-size: 6vw; /* Используем viewport width для адаптивного размера */
+    white-space: nowrap; /* Предотвращаем перенос текста */
+}
+
+.pros {
+	min-height: 100vh;
 }
 
 .pros-img {

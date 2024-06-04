@@ -6,24 +6,23 @@
 {% endblock %}
 
 {% block css_link %}
-    <link rel="stylesheet" href="{% static 'masters/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'products/css/products_list.css' %}">
 {% endblock %}
 
 {% block content %}
-
-    <div class="container">
+    <div class="container my-5 space-top">
         <div class="row">
             <!-- Левая колонка с фильтрами -->
-            <div class="col-md-3">
-                <h3 class="text-white">Filter by Category</h3>
+            <div class="col-md-3 mb-4">
+                <h3 class="text-white">Фильтр</h3>
                 <form method="GET">
-                    <select name="category">
-                        <option value="">All</option>
+                    <select name="category" class="form-control mb-3">
+                        <option value="">Все товары</option>
                         {% for category in categories %}
                             <option value="{{ category.name }}" {% if category.name == selected_category %}selected{% endif %}>{{ category.name }}</option>
                         {% endfor %}
                     </select>
-                    <button type="submit" class="btn btn-primary">Apply Filter</button>
+                    <button type="submit" class="btn btn-primary">Применить</button>
                 </form>
             </div>
 
@@ -31,35 +30,32 @@
             <div class="col-md-9">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     {% for product in products %}
-                        <div class="col">
-                                <div class="card shadow-sm">
-                                    {% if product.image %}
-                                        <img
-                                            src="{{ product.image.url }}"
-                                            alt="{{ product.name }}"
-                                            class="bd-placeholder-img card-img-top master-image"
-                                        />
-                                    {% else %}
-                                        <div class="placeholder-img">Изображение отсутствует</div>
-                                    {% endif %}
-                                    <div class="card-body">
-                                        <a href="{% url 'product_info' product.slug %}"><p class="card-text">{{ product.name }}</p></a>
-                                        <p class="card-text">{{ product.price }}</p>
-                                        <a id="btn_{{ product.id }}" class="btn btn-success" data-cart-url="{% url 'cart' %}" onclick="addToCart({{ product.id }})">Add to Cart</a>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-black-50">{{ product.quantity }}</small>
-                                        </div>
+                        <div class="col mb-4">
+                            <div class="card shadow-sm h-100">
+                                {% if product.image %}
+                                    <img
+                                        src="{{ product.image.url }}"
+                                        alt="{{ product.name }}"
+                                        class="bd-placeholder-img card-img-top master-image"
+                                    />
+                                {% else %}
+                                    <div class="placeholder-img">Изображение отсутствует</div>
+                                {% endif %}
+                                <div class="card-body d-flex flex-column">
+                                    <a href="{% url 'product_info' product.slug %}"><p class="card-text">{{ product.name }}</p></a>
+                                    <p class="card-text">{{ product.price }} руб.</p>
+                                    <a id="btn_{{ product.id }}" class="btn btn-success mt-auto" data-cart-url="{% url 'cart' %}" onclick="addToCart({{ product.id }})">Добавить в корзину</a>
+                                    <div class="d-flex justify-content-between align-items-center mt-3">
+                                        <small class="text-black-50">{{ product.quantity }} шт. в наличии</small>
                                     </div>
-
                                 </div>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
-            </div>
-
 
                 <!-- Пагинация -->
-                <nav aria-label="Page navigation">
+                <nav aria-label="Page navigation" class="mt-4">
                     <ul class="pagination justify-content-center">
                         {% if products.has_previous %}
                             <li class="page-item">
@@ -94,6 +90,7 @@
                 </nav>
             </div>
         </div>
+    </div>
 {% endblock %}
 
 {% block js_link %}

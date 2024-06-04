@@ -1,3 +1,7 @@
+p {
+    font-size: 1.2rem;
+}
+
 .master-details {
     margin-top: 50px;
     text-align: center;
@@ -67,4 +71,8 @@
 .btn-outline-light:hover {
     background-color: #fff;
     color: #343a40;
+}
+
+.space-top {
+    margin-top: -5rem !important;
 }

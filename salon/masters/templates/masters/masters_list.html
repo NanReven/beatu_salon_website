@@ -11,17 +11,17 @@
 {% endblock %}
 
 {% block content %}
-    <section class="py-5 text-center container">
+    <section class="py-5 container space-top">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light text-white">Мастера салона Континенталь</h1>
+                <h1 class="fw-light text-white text-center mb-3">Мастера салона Континенталь</h1>
                 <p class="lead text-white">Наша цель - сделать вас красивыми и уверенными в себе.
                     Доверьтесь нашим мастерам и наслаждайтесь непревзойденным качеством обслуживания.</p>
             </div>
         </div>
     </section>
 
-    <div class="album py-5">
+    <div class="album py-5 space-top">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 {% for master in all_masters %}

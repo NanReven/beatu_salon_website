@@ -1,74 +1,87 @@
 {% extends 'main/main_layout.html' %}
 
-{% block title %}Personal Account{% endblock %}
+{% block title %}Личный кабинет{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1 class="text-white">Welcome to your master account, {{ user.first_name }}!</h1>
-    <p class="text-white">This is your personal account.</p>
+    <h1 class="text-white text-center mt-5">Добро пожаловать в ваш мастерский аккаунт, {{ user.first_name }}!</h1>
+    <p class="text-white text-center mb-4">Это ваш личный кабинет.</p>
 
     {% if messages %}
-        <div class="alert alert-success" role="alert">
-            {% for message in messages %}
-            {{ message }}
-            {% endfor %}
-        </div>
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger" role="alert">
+            {{ message|escape }}
+          </div>
+        {% elif message.tags == 'success' %}
+          <div class="alert alert-success" role="alert">
+            {{ message|escape }}
+          </div>
+        {% endif %}
+      {% endfor %}
     {% endif %}
 
-    <div class="row mt-4">
-        <div class="col-md-6">
+    <div class="row">
+        <!-- Personal Information Card -->
+        <div class="col-md-6 mb-4">
             <div class="card">
-                <div class="card-header">
-                    Personal Information
+                <div class="card-header bg-primary text-white">
+                    Личная информация
                 </div>
                 <div class="card-body">
                     <p><strong>Имя:</strong> {{ user.first_name }}</p>
                     <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
                     <p><strong>Почта:</strong> {{ user.email }}</p>
-                    <a href="{% url 'edit_profile' %}" class="btn btn-primary">Сменить данные</a>
-                    <a href="{% url 'change_password' %}" class="btn btn-secondary">Сменить пароль</a>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'edit_profile' %}" class="btn btn-primary">Сменить данные</a>
+                        <a href="{% url 'change_password' %}" class="btn btn-secondary">Сменить пароль</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+
+        <!-- Salon Visit Requests Card -->
+        <div class="col-md-6 mb-4">
             <div class="card">
-                <div class="card-header">
-                    Salon Visit Requests
+                <div class="card-header bg-primary text-white">
+                    Запросы на посещение салона
                 </div>
                 <div class="card-body">
                     {% if master_bookings %}
-                        <ul>
+                        <ul class="list-group">
                             {% for booking in master_bookings %}
-                                <li>
-                                    Datetime: {{ booking.datetime }}, User: {{ booking.user }}, Service: {{ booking.service }}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Дата и время: {{ booking.datetime }}, Пользователь: {{ booking.user }}, Услуга: {{ booking.service }}
                                     {% if booking.status == '2' %}
-                                        <form action="{% url 'accept_booking' booking.id %}" method="post" style="display: inline;">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-success">Accept</button>
-                                        </form>
-                                        <form action="{% url 'decline_booking' booking.id %}" method="post" style="display: inline;">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-danger">Decline</button>
-                                        </form>
+                                        <div class="btn-group">
+                                            <form action="{% url 'accept_booking' booking.id %}" method="post" class="mb-0">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-sm">Принять</button>
+                                            </form>
+                                            <form action="{% url 'decline_booking' booking.id %}" method="post" class="mb-0">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger btn-sm">Отклонить</button>
+                                            </form>
+                                        </div>
                                     {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p>No salon visit requests available.</p>
+                        <p>Запросы на посещение салона отсутствуют.</p>
                     {% endif %}
                 </div>
             </div>
         </div>
+    </div>
 
-
+    <!-- Actions Section -->
     <div class="row mt-4">
-        <div class="col-md-12">
-            <a href="{% url 'logout' %}" class="btn btn-danger">Log Out</a>
-            <a href="{% url 'booking' %}" class="btn btn-danger">Book an appointment</a>
-            <a href="{% url 'schedule' %}" class="btn btn-danger">Schedule</a>
+        <div class="col-md-12 d-flex justify-content-between">
+            <a href="{% url 'logout' %}" class="btn btn-danger">Выйти</a>
+            <a href="{% url 'booking' %}" class="btn btn-success">Записаться на приём</a>
+            <a href="{% url 'schedule' %}" class="btn btn-info">Расписание</a>
         </div>
     </div>
-</div>
 </div>
 {% endblock %}

@@ -43,10 +43,10 @@ function setTotal() {
     let sum = 0;
     table.querySelectorAll('tr').forEach(function(row) {
         let price = parseFloat(row.cells[1].innerText);
-        let quantity = parseInt(row.cells[3].innerText);
+        let quantity = parseInt(row.cells[3].innerText.at(2));
         sum += price * quantity;
     });
-    total.innerText = sum.toFixed(2);
+    total.innerText = 'Итого: ' + sum.toFixed(2) + ' руб.';
 }
 
 function setAmount(productId, quantity) {

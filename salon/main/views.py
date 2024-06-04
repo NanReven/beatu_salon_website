@@ -398,10 +398,19 @@ def change_password(request):
 @login_required
 def visits_history(request):
     appointments = Appointments.objects.filter(user=request.user, status='1')
+    visit_info = []
     for appointment in appointments:
         if appointment.start_datetime >= timezone.now():
             appointments = appointments.exclude(pk=appointment.pk)
-    return render(request, 'main/visits_history.html', {'appointments': appointments})
+            continue
+
+        info = {
+            'appointment': appointment,
+            'services': AppointmentService.objects.filter(appointment=appointment.pk)
+        }
+        visit_info.append(info)
+
+    return render(request, 'main/visits_history.html', {'visits_info': visit_info})
 
 
 def cart(request):
@@ -441,6 +450,9 @@ def add_product(request):
 
 
 def get_cart_items(request):
+    if not request.user.is_authenticated:
+        return JsonResponse(None, safe=False)
+
     try:
         user_cart = Cart.objects.get(user=request.user, status='pending')
     except Cart.DoesNotExist:

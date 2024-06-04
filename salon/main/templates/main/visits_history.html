@@ -1,32 +1,36 @@
 {% extends 'main/main_layout.html' %}
 
 {% block title %}
-    History of Appointments
+    История визитов
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="text-white">History of Appointments</h1>
+<div class="container mt-5 space-top">
+    <h1 class="text-white mb-4 text-center">История визитов</h1>
     <div class="row">
         <div class="col-md-12">
-            <table class="table">
+            <table class="table table-striped table-dark">
                 <thead>
-                    <tr class="text-white">
-                        <th>Date</th>
-                        <th>Master</th>
-                        <th>Service</th>
-                        <th>Time</th>
-                        <th>Comment</th>
+                    <tr>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Мастер</th>
+                        <th scope="col">Услуги</th>
+                        <th scope="col">Стоимость</th>
+                        <th scope="col">Комментарий</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for appointment in appointments %}
-                    <tr class="text-white">
-                        <td>{{ appointment.datetime|date:"d/m/Y" }}</td>
-                        <td>{{ appointment.master }}</td>
-                        <td>{{ appointment.service }}</td>
-                        <td>{{ appointment.datetime|time:"H:i" }}</td>
-                        <td>{{ appointment.comment }}</td>
+                    {% for visit_info in visits_info %}
+                    <tr>
+                        <td>{{ visit_info.appointment.start_datetime|date:"d/m/Y" }}</td>
+                        <td>{{ visit_info.appointment.master }}</td>
+                        <td>
+                            {% for service in visit_info.services %}
+                                <li>{{ service.service.title }}</li>
+                            {% endfor %}
+                        </td>
+                        <td>{{ visit_info.appointment.total_sum }}</td>
+                        <td>{{ visit_info.appointment.comment }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

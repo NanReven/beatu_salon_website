@@ -13,52 +13,62 @@
 {% block content %}
 
     {% if messages %}
-    <div class="alert alert-success" role="alert">
-        {% for message in messages %}
-        {{ message }}
-        {% endfor %}
-    </div>
+      {% for message in messages %}
+        {% if message.tags == 'error' %}
+          <div class="alert alert-danger" role="alert">
+            {{ message|escape }}
+          </div>
+        {% elif message.tags == 'success' %}
+          <div class="alert alert-success" role="alert">
+            {{ message|escape }}
+          </div>
+        {% endif %}
+      {% endfor %}
     {% endif %}
 
-    <div class="container">
-        <h2 class="text-white">Your Cart</h2>
-        <table class="table">
-            <thead>
-                <tr class="text-white">
-                    <th scope="col">Товар</th>
-                    <th scope="col">Цена</th>
-                    <th scope="col">Всего на складе</th>
-                    <th scope="col">Количество</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item, price in cart_items %}
-                <tr id="row_{{ item.pk }}" class="text-white">
-                    <td>{{ item.product }}</td>
-                    <td>{{ price }}</td>
-                    <td>
-                        <span id="amount_{{ item.product.pk }}">{{ item.product.quantity }}</span>
-                    </td>
-                    <td>
-                        <span id="quantity_{{ item.product.pk }}">{{ item.quantity }}</span>
-                    </td>
-                    <td>
-                        <button id="decrease_button" class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity({{ item.product.pk }})">-</button>
-                        <button id="increase_button" class="btn btn-outline-secondary" type="button" onclick="increaseQuantity({{ item.product.pk }})">+</button>
-                        <button class="btn btn-danger" onclick="removeFromCart('{{ item.product.pk }}')">Remove</button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <p class="text-white" id="total_price">Total: {{ total }}</p>
-        <button class="btn btn-primary" onclick="reserveCart()">Book Now</button>
+    <div class="container mt-5">
+        <h2 class="text-white mb-4">Ваша корзина</h2>
+        <div class="table-responsive">
+            <table class="table table-dark table-bordered table-hover text-center align-middle">
+                <thead class="align-middle">
+                    <tr>
+                        <th scope="col" class="text-left">Товар</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Всего на складе</th>
+                        <th scope="col">Количество</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item, price in cart_items %}
+                    <tr id="row_{{ item.pk }}">
+                        <td>{{ item.product }}</td>
+                        <td>{{ price }}</td>
+                        <td>
+                            <span id="amount_{{ item.product.pk }}">{{ item.product.quantity }}</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group">
+                                <button class="btn btn-outline-secondary btn-sm" type="button" onclick="decreaseQuantity({{ item.product.pk }})">-</button>
+                                <span class="mx-2" id="quantity_{{ item.product.pk }}">{{ item.quantity }}</span>
+                                <button class="btn btn-outline-secondary btn-sm" type="button" onclick="increaseQuantity({{ item.product.pk }})">+</button>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="removeFromCart('{{ item.product.pk }}')">
+                                <i class="fa fa-trash"></i> Удалить
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <p class="text-white" id="total_price">Итого: {{ total }}</p>
+        <button class="btn btn-primary mb-5" onclick="reserveCart()">Забронировать</button>
     </div>
 {% endblock %}
 
 {% block js_link %}
     <script src="{% static 'main/js/cart.js' %}"></script>
 {% endblock %}
-
-

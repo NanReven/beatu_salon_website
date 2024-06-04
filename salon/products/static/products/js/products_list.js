@@ -11,7 +11,7 @@ $(document).ready(function() {
                 let btn_id = "btn_" + item.item_id;
                 let button = document.getElementById(btn_id);
                 if (button) {
-                    button.innerText = 'в корзине';
+                    button.innerText = 'В корзине';
                     let cartUrl = button.getAttribute('data-cart-url');
                     button.setAttribute('href', cartUrl);
                 }

@@ -9,18 +9,19 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container py-5">
-        <div class="row mb-4">
-            <div class="col text-center">
-                <h1 class="display-4 text-white">{{ category.title }}</h1>
-                <p class="lead text-white">Выберите услугу из списка ниже</p>
+    <div class="container">
+        <div class="row space-top">
+            <div class="col">
+                <h1 class="display-4 text-white text-center">{{ category.title }}</h1>
+                <p class="lead text-white">{{ category.description|linebreaksbr }}</p>
+                <p class="text-white text-center">Выберите услугу из списка ниже</p>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-5">
             {% for service in all_services %}
                 <div class="col-md-4 col-sm-6 mb-4">
-                    <div class="card service-card h-100" onclick="window.location.href='{% url 'service_info' category.slug service.slug %}'">
-                        <div class="card-body d-flex flex-column">
+                    <div class="card service-card h-100">
+                        <div class="card-body d-flex flex-column" onclick="window.location.href='{% url 'booking' %}'">
                             <h5 class="card-title">{{ service.title }}</h5>
                             <p class="card-text">Длительность: {{ service.duration }}</p>
                             <p class="card-text">Цена: {{ service.cost }} руб.</p>

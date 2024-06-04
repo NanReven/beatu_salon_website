@@ -9,12 +9,11 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ServicesAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'duration', 'cost', 'slug')
+    list_display = ('title', 'category', 'duration', 'cost',)
     list_filter = ('category',)
     search_fields = ('title', )
-    prepopulated_fields = {'slug': ('title',)}
     list_editable = ('cost', 'duration', )
-    fields = ('title', 'category', 'description', 'duration', 'cost', 'photo', 'slug')
+    fields = ('title', 'category', 'duration', 'cost',)
 
 
 admin.site.register(Services, ServicesAdmin)

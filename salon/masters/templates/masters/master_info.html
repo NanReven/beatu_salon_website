@@ -13,11 +13,11 @@
 {% block content %}
     <div class="container">
         <div class="row justify-content-center master-details">
-            <div class="col-md-8 text-center">
+            <div class="col-md-8 space-top">
                 <div class="master-photo-container mb-3">
                     <img src="{{ master.photo.url }}" alt="Master Photo" class="img-fluid rounded master-photo">
                 </div>
-                <h2 class="mt-3 text-white">{{ master.user.first_name }} {{ master.user.last_name }}</h2>
+                <h2 class="mt-3 text-white text-center">{{ master.user.first_name }} {{ master.user.last_name }}</h2>
                 <p class="text-white text-left">{{ master.full_description|linebreaksbr }}</p>
             </div>
         </div>
@@ -42,8 +42,8 @@
         </div>
 
         <div class="row justify-content-center mt-4">
-            <div class="col-md-4 text-center">
-                <a href="{% url 'booking' %}" class="btn btn-lg btn-primary text-uppercase">Записаться к мастеру</a>
+            <div class="col-md-4 text-center mb-5">
+                <a href="{% url 'booking' %}" class="btn btn-lg btn-primary">Записаться к мастеру</a>
             </div>
         </div>
     </div>

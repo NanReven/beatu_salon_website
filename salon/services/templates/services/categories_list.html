@@ -1,19 +1,11 @@
 {% extends 'main/main_layout.html' %}
-
 {% load static %}
-
-
-{% block title %} Services {% endblock %}
-
+{% block title %}Услуги {% endblock %}
 {% block css_link %}
     <link rel="stylesheet" href="{% static 'masters/css/style.css' %}">
 {% endblock %}
-
-
 {% block content %}
-
-
-<section class="py-5 text-center container">
+<section class="py-5 text-center container space-top">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light text-white">Услуги салона Континенталь</h1>
@@ -22,7 +14,7 @@
         </div>
     </section>
 
-    <div class="album py-5">
+    <div class="album py-5 space-top">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 {% for category in all_categories %}

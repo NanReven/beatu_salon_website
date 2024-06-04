@@ -3,69 +3,79 @@
 {% load static %}
 
 {% block title %}
-    History of Orders
-{% endblock %}
-
-{% block css_link %}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    История заказов
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="text-white">History of Orders</h1>
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table">
-    <thead>
-        <tr class="text-white">
-            <th>Date</th>
-            <th>Status</th>
-            <th>Issue code</th>
-            <th>Products</th>
-            <th>Total</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for order_info in orders_info %}
-        <tr class="text-white">
-            <td>{{ order_info.order.order_date }}</td>
-            <td>{{ order_info.order.status }}</td>
-            <td>{{ order_info.order.issue_code }}</td>
-            <td>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in order_info.items %}
-                        <tr>
+    <section>
+        <div class="container space-top">
+            <div class="row">
+                <h1 class="text-white text-center">История ваших заказов</h1>
+            </div>
+        </div>
+    </section>
+
+<section class="intro space-top">
+  <div class="gradient-custom-2 h-100">
+    <div class="mask d-flex align-items-center h-100">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="table-responsive">
+              <table class="table table-responsive table-dark table-bordered table-hover text-center align-middle">
+                <thead class="align-middle">
+                  <tr>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Код выдачи</th>
+                    <th scope="col">Товары</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Действие</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order_info in orders_info %}
+                  <tr>
+                    <td>{{ order_info.order.order_date }}</td>
+                    <td>{{ order_info.order.get_status_display }}</td>
+                    <td>{{ order_info.order.issue_code }}</td>
+                    <td>
+                      <table class="table table-sm table-dark table-borderless">
+                        <thead>
+                          <tr>
+                            <th scope="col">Товар</th>
+                            <th scope="col">Количество</th>
+                            <th scope="col">Цена</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for item in order_info.items %}
+                          <tr>
                             <td>{{ item.product.name }}</td>
                             <td>{{ item.quantity }}</td>
                             <td>{{ item.product.price }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </td>
-            <td>{{ order_info.order.total_sum }}</td>
-            <td>
-                {% if order_info.order.status == 'ready' %}
-                <button class="btn btn-danger" onclick="cancelOrder('{{ order_info.order.pk }}')">Cancel</button>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </td>
+                    <td>{{ order_info.order.total_sum }}</td>
+                    <td>
+                      {% if order_info.order.status == 'ready' %}
+                      <button class="btn btn-danger" onclick="cancelOrder('{{ order_info.order.pk }}')">Отменить заказ</button>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+</section>
 {% endblock %}
 
 {% block js_link %}

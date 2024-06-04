@@ -1,12 +1,43 @@
+/* General styling for the page */
+body {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+/* Hero section */
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+}
+
+/* About Us Section */
 .about-us {
-  margin-top: 50px;
+    margin-top: 50px;
 }
 
+/* Mission Section */
 .mission-section {
-  background-color: #f8f9fa;
-  padding: 30px 0;
+    padding: 50px 0;
 }
 
+/* History Section */
 .history-section {
-  padding: 30px 0;
+    padding: 50px 0;
+}
+
+/* Text alignment for better readability */
+.text-justify {
+    text-align: justify;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        height: 300px;
+    }
+
+    .container {
+        padding: 15px;
+    }
 }

@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    Версаль
+    Версаль - О нас
 {% endblock %}
 
 {% block css_link %}
@@ -11,38 +11,48 @@
 {% endblock %}
 
 {% block content %}
+<div class="container-fluid p-0">
+    <!-- Hero Section -->
+    <div class="hero-section text-center text-white d-flex align-items-center justify-content-center">
+        <h1 class="display-4">Добро пожаловать в Версаль</h1>
 
-<!-- Navbar (you can include your navigation bar here) -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Your Salon Name</a>
-  <!-- Add your navigation links here -->
-</nav>
-
-<div class="container about-us">
-  <div class="row">
-    <div class="col-md-8">
-      <h2>About Us</h2>
-
-      <!-- Mission Section -->
-      <div class="mission-section">
-        <h3>Our Mission</h3>
-        <p class="lead">At Your Salon Name, our mission is to provide exceptional beauty and wellness services that enhance the well-being of our clients. We are dedicated to creating a welcoming and relaxing environment where our skilled team strives for excellence in every service we offer.</p>
-      </div>
-
-      <!-- Team Section -->
-      <h3>Our Team</h3>
-      <p class="lead">Meet the talented individuals who make Your Salon Name special. Our team of experienced professionals is passionate about delivering top-notch beauty and wellness services to our valued clients.</p>
-      <!-- Include team members' information here -->
-
-      <!-- History Section -->
-      <div class="history-section">
-        <h3>Our History</h3>
-        <p class="lead">Established in [Year], Your Salon Name has been a trusted destination for beauty and wellness services. Over the years, we have built a strong reputation for excellence and customer satisfaction.</p>
-      </div>
-
-      <!-- Additional Sections (Add more sections as needed) -->
     </div>
-  </div>
-</div>
 
+    <!-- About Us Section -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <h2 class="text-center mb-4">О нас</h2>
+                <p class="lead text-justify">В салоне Версаль наша миссия - предоставлять исключительные услуги в области красоты и ухода, которые улучшат самочувствие наших клиентов. Мы стремимся создать приветливую и расслабляющую атмосферу, где наша опытная команда достигает совершенства в каждой услуге, которую мы предлагаем.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="container-fluid mission-section text-center py-5">
+        <div class="container">
+            <h3 class="mb-4">Наша миссия</h3>
+            <p class="lead">Наша миссия - предоставлять исключительные услуги красоты и ухода, которые улучшают самочувствие наших клиентов. Мы стремимся создать приветливую и расслабляющую атмосферу, где наша команда достигает совершенства в каждой услуге.</p>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <h3 class="text-center mb-4">Наша команда</h3>
+                <p class="lead text-justify">Познакомьтесь с талантливыми людьми, которые делают салон Версаль особенным. Наша команда опытных профессионалов страстно стремится предоставлять первоклассные услуги красоты и ухода нашим ценным клиентам.</p>
+                <!-- Include team members' information here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- History Section -->
+    <div class="container-fluid history-section text-center py-5">
+        <div class="container">
+            <h3 class="mb-4">Наша история</h3>
+            <p class="lead">Основанный в [Year], салон Версаль стал надежным местом для услуг красоты и ухода. За годы работы мы заслужили репутацию за исключительное качество и удовлетворение клиентов.</p>
+        </div>
+    </div>
+</div>
 {% endblock %}
