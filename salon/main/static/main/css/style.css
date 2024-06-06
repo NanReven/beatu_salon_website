@@ -1,6 +1,5 @@
-:root {
-	--color1: #05b1b1;
-	--color2: #52339a;
+body {
+    font-family: helvetica, sans-serif;
 }
 
 h1 {
@@ -57,35 +56,91 @@ ul a:hover {
 }
 
 .pros {
-	min-height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
 }
 
 .pros-img {
-	max-width: 15vw;
-  	max-height: 15vw;
-	border-radius: 50%;
+    max-width: 15vw;
+    max-height: 15vw;
+    border-radius: 50%;
+}
+
+.pros h2 {
+    margin-bottom: 20px;
+}
+
+.pros p {
+    font-size: 1.2em; /* Увеличиваем размер шрифта параграфа */
+    margin-bottom: 20px;
 }
 
 .pros-btn {
-	display: block;
-	max-width: 200px;
-	margin: 0 auto;
-	padding: 8px 30px;
-	color: white;
-	background-color: var(--color2);
+    display: block;
+    max-width: 200px;
+    margin: 30px auto; /* Добавляем отступ сверху */
+    padding: 8px 30px;
+    color: black;
 }
 
-.pros-btn:hover {
-	color: white;
-	background-color: var(--color1);
+.first_section, .second_section, .third_section {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    min-height: 100vh;
 }
 
-.about {
-	padding: 15px;
+.first_section, .second_section, .third_section h1 {
+    color: white;
 }
 
-.about-img {
-	width: 25vw;
-  	height: 25vw;
+.first_section {
+    background-image: url("/static/main/img/test1.jpg");
 }
 
+.second_section {
+    background-image: url("/static/main/img/test2.jpg");
+}
+
+.third_section {
+    background-image: url("/static/main/img/haircut.jpg");
+}
+
+.white-section {
+	min-height: 100vh;
+	background-color: white;
+}
+
+.white-section {
+    min-height: 100vh;
+    background-color: white;
+    display: flex;
+    align-items: center;
+}
+
+.master-img, .product-img {
+    max-width: 15vw;
+    max-height: 15vw;
+    border-radius: 50%;
+}
+
+.white-section h2 {
+    font-size: 2.5em; /* Увеличиваем размер шрифта заголовка */
+    margin-bottom: 20px;
+}
+
+.white-section p {
+    font-size: 1.2em; /* Увеличиваем размер шрифта параграфа */
+    margin-bottom: 20px;
+}
+
+.link-btn {
+    display: block;
+    max-width: 200px;
+    margin: 30px auto; /* Добавляем отступ сверху */
+    padding: 8px 30px;
+    background-color: black;
+    color: white;
+}

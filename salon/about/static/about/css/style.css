@@ -1,43 +1,36 @@
-/* General styling for the page */
-body {
-    font-family: 'Arial', sans-serif;
-    color: #333;
+.mission-section, .history-section, .map-section {
+    background-color: #f8f9fa;
 }
 
-/* Hero section */
-.hero-section {
-    background-size: cover;
-    background-position: center;
-    height: 400px;
+.mission-section img, .history-section img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
 }
 
-/* About Us Section */
-.about-us {
-    margin-top: 50px;
+.salon-img, .product-img, .master-img {
+    border-radius: 10px;
 }
 
-/* Mission Section */
-.mission-section {
-    padding: 50px 0;
+.salon-btn, .products-btn {
+    display: block;
+    max-width: 200px;
+    margin: 30px auto;
+    padding: 8px 30px;
+    color: black;
+    border: 2px solid black;
+    background-color: white;
+    text-transform: uppercase;
 }
 
-/* History Section */
-.history-section {
-    padding: 50px 0;
+.carousel-item img {
+    border-radius: 10px;
 }
 
-/* Text alignment for better readability */
-.text-justify {
-    text-align: justify;
+.mission-section .fas {
+    color: #ff6f61;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .hero-section {
-        height: 300px;
-    }
-
-    .container {
-        padding: 15px;
-    }
+.mission-section h4 {
+    margin-top: 10px;
 }

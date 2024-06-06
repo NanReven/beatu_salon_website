@@ -19,6 +19,7 @@
                 </div>
                 <h2 class="mt-3 text-white text-center">{{ master.user.first_name }} {{ master.user.last_name }}</h2>
                 <p class="text-white text-left">{{ master.full_description|linebreaksbr }}</p>
+                <p class="text-white text-left">Выходные дни: {{ master.weekend.all|join:", " }}</p>
             </div>
         </div>
 

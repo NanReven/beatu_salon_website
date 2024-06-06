@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    Версаль - О нас
+    О нас
 {% endblock %}
 
 {% block css_link %}
@@ -12,47 +12,91 @@
 
 {% block content %}
 <div class="container-fluid p-0">
-    <!-- Hero Section -->
     <div class="hero-section text-center text-white d-flex align-items-center justify-content-center">
-        <h1 class="display-4">Добро пожаловать в Версаль</h1>
-
+        <div class="overlay"></div>
+        <h1 class="display-4">Добро пожаловать в Континенталь</h1>
     </div>
 
-    <!-- About Us Section -->
     <div class="container py-5">
-        <div class="row">
-            <div class="col-lg-10 offset-lg-1">
-                <h2 class="text-center mb-4">О нас</h2>
-                <p class="lead text-justify">В салоне Версаль наша миссия - предоставлять исключительные услуги в области красоты и ухода, которые улучшат самочувствие наших клиентов. Мы стремимся создать приветливую и расслабляющую атмосферу, где наша опытная команда достигает совершенства в каждой услуге, которую мы предлагаем.</p>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="mb-4 text-white">О нас</h2>
+                <p class="lead text-white">В салоне Континенталь наша миссия - предоставлять исключительные услуги в области красоты и ухода, которые улучшат самочувствие наших клиентов.
+                    Мы стремимся создать приветливую и расслабляющую атмосферу, где наша опытная команда достигает совершенства в каждой услуге, которую мы предлагаем.</p>
+            </div>
+            <div class="col-lg-6">
+                <div id="aboutCarousel" class="carousel slide">
+                      <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#aboutCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                      </div>
+                      <div class="carousel-inner">
+                        <div class="carousel-item active">
+                          <img src="{% static 'about/img/slide1.jpg' %}" class="d-block w-100" alt="About Us 1">
+                        </div>
+                        <div class="carousel-item">
+                          <img src="{% static 'about/img/slide2.jpg' %}" class="d-block w-100" alt="About Us 2">
+                        </div>
+                        <div class="carousel-item">
+                          <img src="{% static 'about/img/slide2.jpg' %}" class="d-block w-100" alt="About Us 3">
+                        </div>
+                      </div>
+                      <button class="carousel-control-prev" type="button" data-bs-target="#aboutCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                      </button>
+                      <button class="carousel-control-next" type="button" data-bs-target="#aboutCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                      </button>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
 
     <!-- Mission Section -->
     <div class="container-fluid mission-section text-center py-5">
         <div class="container">
             <h3 class="mb-4">Наша миссия</h3>
             <p class="lead">Наша миссия - предоставлять исключительные услуги красоты и ухода, которые улучшают самочувствие наших клиентов. Мы стремимся создать приветливую и расслабляющую атмосферу, где наша команда достигает совершенства в каждой услуге.</p>
-        </div>
-    </div>
-
-    <!-- Team Section -->
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-lg-10 offset-lg-1">
-                <h3 class="text-center mb-4">Наша команда</h3>
-                <p class="lead text-justify">Познакомьтесь с талантливыми людьми, которые делают салон Версаль особенным. Наша команда опытных профессионалов страстно стремится предоставлять первоклассные услуги красоты и ухода нашим ценным клиентам.</p>
-                <!-- Include team members' information here -->
+            <div class="row">
+                <div class="col-md-4">
+                    <i class="fas fa-spa fa-3x mb-3"></i>
+                    <h4>Расслабление</h4>
+                    <p>Мы создаем атмосферу полного расслабления для всех наших клиентов.</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-star fa-3x mb-3"></i>
+                    <h4>Качество</h4>
+                    <p>Используем только лучшие материалы и продукты.</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-heart fa-3x mb-3"></i>
+                    <h4>Уход</h4>
+                    <p>Каждый клиент получает индивидуальный подход и заботу.</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- History Section -->
     <div class="container-fluid history-section text-center py-5">
         <div class="container">
             <h3 class="mb-4">Наша история</h3>
-            <p class="lead">Основанный в [Year], салон Версаль стал надежным местом для услуг красоты и ухода. За годы работы мы заслужили репутацию за исключительное качество и удовлетворение клиентов.</p>
+            <p class="lead">Основанный в 2022 году, салон Континенталь стал надежным местом для услуг красоты и ухода. За годы работы мы заслужили репутацию за исключительное качество и удовлетворение клиентов.</p>
+            <p class="lead">Мы работаем без выходных с 10:00 до 20:00, чтобы каждый мог найти время для себя и своих потребностей.</p>
+            <img src="{% static 'main/img/logo-black.png' %}" alt="History" class="img-fluid rounded mt-4">
         </div>
     </div>
-</div>
+
+    <div class="container-fluid map-section text-center py-5">
+        <div class="col-12 text-center">
+            <h3>Как добраться</h3>
+            <div class="mx-auto" style="width: 614px; height: 611px;">
+                <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A3400fbd30cc68c3fab27c271fa702bad74dd4720749a3edc9b01fcb58b62ae53&amp;width=614&amp;height=611&amp;lang=ru_RU&amp;scroll=true"></script>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="{% static 'main/img/favicon.ico' %}" >
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
     <title>Континенталь</title>
 </head>
 <body>
-<header>
+<header data-aos="fade-up">
     <nav class="navbar navbar-expand-lg navbar-dark static-top space-top">
         <div class="container">
             <a class="navbar-brand" href="{%url 'home_page' %}">
@@ -58,78 +59,117 @@
     </div>
 </header>
 
-<section class="pros">
+<section class="pros d-flex align-items-center" data-aos="fade-up">
     <div class="container">
-        <div class="row">
+        <div class="row mb-5">
             <div class="text-center col-md-4 col-sm-12">
-                <img src="{% static 'main/img/row_3.jpg' %}" alt="pros" class="pros-img">
+                <img src="{% static 'main/img/haircut.jpg' %}" alt="pros" class="pros-img mb-4">
                 <h2>Изысканная красота</h2>
-                <p>Храм красоты и благополучия ждет вас в салоне «Версаль». Погрузитесь в мир ухода и омоложения.
-                    Храм красоты и благополучия ждет вас в салоне «Версаль». Погрузитесь в мир ухода и омоложения.</p>
+                <p>Храм красоты и благополучия ждет вас в салоне «Континенталь». Погрузитесь в мир ухода и омоложения.
+                    Храм красоты и благополучия ждет вас в салоне «Континенталь». Погрузитесь в мир ухода и омоложения.</p>
             </div>
             <div class="text-center col-md-4 col-sm-12">
-                <img src="{% static 'main/img/row_3.jpg' %}" alt="pros" class="pros-img">
+                <img src="{% static 'main/img/massage.jpg' %}" alt="pros" class="pros-img mb-4">
                 <h2>Ваш личный оазис</h2>
                 <p>Салон Versailles - это ваш личный оазис стиля и элегантности.
                     Наши квалифицированные специалисты стремятся подчеркнуть вашу естественную красоту.</p>
             </div>
             <div class="text-center col-md-4 col-sm-12">
-                <img src="{% static 'main/img/row_3.jpg' %}" alt="pros" class="pros-img">
+                <img src="{% static 'main/img/manicure.jpg' %}" alt="pros" class="pros-img mb-4">
                 <h2>Непревзойденный опыт</h2>
                 <p>В салоне Versailles мы гордимся тем, что обеспечиваем красоту с непревзойденным мастерством.
                     Доверьтесь нашей опытной команде, чтобы повысить уровень обслуживания в салоне.</p>
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
-                <a href="{%url 'services_list' %}" class="btn btn-lg text-uppercase pros-btn">Все услуги</a>
+            <div class="col-12 text-center">
+                <a href="{% url 'services_list' %}" class="btn btn-lg text-uppercase link-btn mt-4">Все услуги</a>
             </div>
         </div>
     </div>
 </section>
 
-<section class="about">
-    <div class="container">
-        <div class="row mb-5">
-            <div class="col-xl-9 col-lg-12">
-                <h2>Роскошный опыт в области красоты.<span class="text-muted">Погрузитесь в искусство красоты.</span>
-                </h2>
-                <p class="lead">Ознакомьтесь с нашими изысканными услугами и побалуйте себя в атмосфере элегантности и
-                    стиля.
-                    Наши квалифицированные специалисты стремятся предоставить вам роскошный опыт в области красоты.</p>
+
+<div class="first_section d-flex justify-content-center align-items-center" data-aos="fade-up">
+    <h1 class="text-center">Роскошный опыт в области красоты</h1>
+</div>
+
+
+<section class="white-section d-flex align-items-center" data-aos="fade-up">
+    <div class="container text-center">
+        <h2>Наши мастера</h2>
+        <p>В салоне "Континенталь" работают только самые опытные и квалифицированные специалисты, которые постоянно повышают свою квалификацию. Они всегда готовы помочь вам обрести уверенность в себе и подчеркнуть вашу естественную красоту.</p>
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <img src="{% static 'main/img/male2.jpeg' %}" alt="Master 1" class="master-img mb-4">
+                <h3>Иван Михайлов</h3>
+                <p>Массажист с опытом работы более 10 лет.</p>
             </div>
-            <div class="col-xl-3 col-lg-12 text-center">
-                <img src="{% static 'main/img/massage.jpg' %}" alt="Ismail" class="about-img">
+            <div class="col-md-4 col-sm-12">
+                <img src="{% static 'main/img/darina.jpeg' %}" alt="Master 2" class="master-img mb-4">
+                <h3>Дарина Кузнецова</h3>
+                <p>Стилист и парикмахер с индивидуальным подходом к каждому клиенту.</p>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <img src="{% static 'main/img/master7.jpeg' %}" alt="Master 3" class="master-img mb-4">
+                <h3>Ольга Смирнова</h3>
+                <p>Косметолог с многолетним опытом работы и отличными отзывами клиентов.</p>
             </div>
         </div>
+        <a href="{% url 'masters_list' %}" class="btn btn-lg text-uppercase link-btn mt-4">Наши мастера</a>
+    </div>
+</section>
 
-        <div class="row mb-5">
-            <div class="col-xl-9 col-lg-12">
-                <h2>Откройте для себя красоту в каждой детали. <span
-                        class="text-muted">Захватывающее и омолаживающее.</span></h2>
-                <p class="lead">Погрузитесь в детали, которые делают наш салон исключительным.
-                    От омолаживающих процедур до восхитительных укладок - мы гордимся тем, что обеспечиваем красоту,
-                    превосходящую ожидания.</p>
+<div class="second_section d-flex justify-content-center align-items-center" data-aos="fade-up">
+    <h1 class="text-center">Откройте для себя красоту в каждой детали</h1>
+</div>
+
+<section class="white-section d-flex align-items-center" data-aos="fade-up">
+    <div class="container text-center">
+        <h2>Наша продукция</h2>
+        <p>В нашем салоне вы найдете широкий ассортимент высококачественной косметики и средств по уходу за кожей, которые помогут вам сохранить и подчеркнуть вашу естественную красоту. Мы предлагаем продукцию только проверенных брендов, известных своим качеством и эффективностью.</p>
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <img src="{% static 'main/img/hairs.jpeg' %}" alt="Product 1" class="product-img mb-4">
+                <h3>Уход за волосами</h3>
+                <p>Шампуни, кондиционеры и маски для волос от ведущих брендов.</p>
             </div>
-            <div class="col-xl-3 col-lg-12 text-center">
-                <img src="{% static 'main/img/haircut.jpg' %}" alt="Ismail" class="about-img">
+            <div class="col-md-4 col-sm-12">
+                <img src="{% static 'main/img/cream.jpeg' %}" alt="Product 2" class="product-img mb-4">
+                <h3>Уход за кожей</h3>
+                <p>Кремы, лосьоны и сыворотки для всех типов кожи.</p>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <img src="{% static 'main/img/makeup.jpeg' %}" alt="Product 3" class="product-img mb-4">
+                <h3>Макияж</h3>
+                <p>Широкий ассортимент декоративной косметики для вашего идеального образа.</p>
             </div>
         </div>
+        <a href="{% url 'products_list' %}" class="btn btn-lg text-uppercase link-btn mt-4">Вся продукция</a>
+    </div>
+</section>
 
-        <div class="row mb-5">
-            <div class="col-xl-9 col-lg-12">
-                <h2 class="featurette-heading">Возвысьте свое путешествие в мир красоты. <span class="text-muted">Непревзойденный опыт и забота.</span>
-                </h2>
-                <p class="lead">Почувствуйте вершину красоты с нашей командой экспертов.
-                    От индивидуальных консультаций до искусного исполнения - мы стремимся придать вашей красоте
-                    непревзойденный опыт и заботу.</p>
-            </div>
-            <div class="col-xl-3 col-lg-12 text-center">
-                <img src="{% static 'main/img/tinting.jpg' %}" alt="Ismail" class="about-img">
+
+<div class="third_section d-flex justify-content-center align-items-center" data-aos="fade-up">
+    <h1 class="text-center">Непревзойденный опыт</h1>
+</div>
+
+<section class="white-section d-flex align-items-center" data-aos="fade-up">
+    <div class="container text-center">
+    <h2>О нашем салоне</h2>
+    <p>Салон "Континенталь" — это оазис красоты и уюта в самом сердце города. Мы предлагаем широкий спектр услуг по уходу за волосами, кожей и телом. Наши профессиональные мастера всегда рады помочь вам обрести уверенность в себе и подчеркнуть вашу естественную красоту.</p>
+    <div class="row">
+        <div class="col-12 text-center">
+            <h3>Как добраться</h3>
+            <div class="mx-auto" style="width: 614px; height: 611px;">
+                <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A3400fbd30cc68c3fab27c271fa702bad74dd4720749a3edc9b01fcb58b62ae53&amp;width=614&amp;height=611&amp;lang=ru_RU&amp;scroll=true"></script>
             </div>
         </div>
     </div>
+    <a href="{% url 'about' %}" class="btn btn-lg text-uppercase link-btn mt-4">Контактная информация</a>
+</div>
 </section>
+
 
 <footer class="bg-dark text-white py-4">
     <div class="container">
@@ -162,6 +202,14 @@
         </div>
     </div>
 </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        AOS.init({
+            duration: 1000, // длительность анимации в миллисекундах
+            easing: 'ease-out', // функция ускорения анимации
+            once: true // запуск анимации только один раз
+        });
+    </script>
 </body>
 </html>
