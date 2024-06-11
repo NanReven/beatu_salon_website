@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
+        <div class="row mb-3">
             {% if messages %}
               {% for message in messages %}
                 {% if message.tags == 'error' %}
@@ -38,7 +38,7 @@
                         <label class="text-white">Электронная почта</label>
                         {{form.email}}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mt-3">
                         <input type="submit" name="submit" class="btn btn-primary" value="Сохранить">
                     </div>
                 </form>

@@ -123,7 +123,6 @@ def cancel_booking(request, booking_id):
     return redirect('account')
 
 
-@login_required
 def get_activation_email(request, user):
     current_site = get_current_site(request)
     protocol = 'https' if request.is_secure() else 'http'
@@ -227,6 +226,8 @@ def account(request):
     if request.user.is_customer:
         user_bookings = Appointments.objects.filter(user=request.user, start_datetime__gte=timezone.now()) \
             .filter(Q(status='1') | Q(status='2')).order_by('-start_datetime')
+        visit_info = []
+
         for book in user_bookings:
             if book.start_datetime.date() == datetime.datetime.now().date():
                 # booking is outdated
@@ -235,18 +236,32 @@ def account(request):
                     obj = Appointments.objects.get(pk=book.pk)
                     obj.status = '0'
                     obj.save()
-        return render(request, 'main/user_account.html', {'user_bookings': user_bookings})
+
+            info = {
+                'booking': book,
+                'services': AppointmentService.objects.filter(appointment=book.pk)
+            }
+            visit_info.append(info)
+
+        return render(request, 'main/user_account.html', {'user_bookings': visit_info, })
     else:
         master = Masters.objects.filter(user=request.user)[0]
         master_bookings = Appointments.objects.filter(master=master, status='2')
+        visit_info = []
+
         for book in master_bookings:
             if book.start_datetime.date() == datetime.datetime.now().date():
-                if book.time <= datetime.datetime.now():
+                if book.start_datetime.time() <= datetime.datetime.now().time():
                     master_bookings.exclude(pk=book.pk)
                     obj = Appointments.objects.get(pk=book.pk)
                     obj.status = '0'
                     obj.save()
-        return render(request, 'main/master_account.html', {'master_bookings': master_bookings})
+            info = {
+                'booking': book,
+                'services': AppointmentService.objects.filter(appointment=book.pk)
+            }
+            visit_info.append(info)
+        return render(request, 'main/master_account.html', {'master_bookings': visit_info})
 
 
 @login_required
@@ -260,7 +275,8 @@ def booking(request):
             duration = datetime.timedelta()
             total_sum = 0
             for appointment_service in form.cleaned_data['services']:
-                duration += datetime.timedelta(hours=appointment_service.duration.hour, minutes=appointment_service.duration.minute)
+                duration += datetime.timedelta(hours=appointment_service.duration.hour, minutes=appointment_service.
+                                               duration.minute)
                 total_sum += appointment_service.cost
 
             appointment_end = appointment_start + duration
@@ -506,7 +522,7 @@ def reserve(request):
     user_cart.order_date = timezone.now()
     user_cart.total_sum = float(request.POST.get('sum'))
     user_cart.save()
-    messages.success(request, 'Everything is ok')
+    messages.success(request, 'Товары успешно забронированы, ваш код выдачи: ' + user_cart.issue_code)
     return JsonResponse("true", safe=False)
 
 

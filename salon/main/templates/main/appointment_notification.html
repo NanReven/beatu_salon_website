@@ -1,4 +1,3 @@
-<!-- templates/email/appointment_notification.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -6,7 +5,7 @@
     <title>Новая заявка на бронирование</title>
 </head>
 <body>
-    <p>Здравствуйте, {{ master.user.first_name }} {{ master.user.last_name }}!</p>
+    <p>Здравствуйте, {{ master.first_name }}!</p>
     <p>Вы получили новую заявку на бронирование:</p>
     <ul>
         <li>Клиент: {{ user.first_name }} {{ user.last_name }}</li>
@@ -15,6 +14,6 @@
         <li>Сумма: {{ appointment.total_sum }} руб.</li>
         <li>Комментарий: {{ appointment.comment }}</li>
     </ul>
-    <p>Пожалуйста, зайдите в систему для подтверждения или отклонения заявки.</p>
+    <p>Пожалуйста, зайдите в аккаунт для получения деталей и подтверждения или отклонения заявки.</p>
 </body>
 </html>

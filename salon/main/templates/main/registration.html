@@ -56,7 +56,7 @@
         <label class="text-white">Повторите пароль</label>
         {{ form.password2 }}
     </div>
-    <div class="form-group">
+    <div class="form-group mt-3">
         <input type="submit" name="submit" class="btn btn-primary" value="Зарегистрироваться">
     </div>
     {% if form.errors %}
@@ -66,7 +66,7 @@
             {% endfor %}
         </div>
     {% endif %}
-    <p class="text-white">Уже зарегистрированы? <a href="{% url 'login' %}">Войдите в систему</a>.</p>
+    <p class="text-white mt-3">Уже зарегистрированы? <a href="{% url 'login' %}">Войдите в систему</a>.</p>
 </form>
 
 </div>
