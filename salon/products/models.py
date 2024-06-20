@@ -1,6 +1,8 @@
 import datetime
 
 from django.db import models
+from django.utils.timezone import now
+
 from masters.models import Users
 
 
@@ -40,7 +42,7 @@ class Cart(models.Model):
         COMPLETED = 'completed', 'Выдан'
 
     user: Users = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='Пользователь', unique=False)
-    order_date = models.DateTimeField(default=datetime.datetime.now(), verbose_name='Дата оформления')
+    order_date = models.DateTimeField(default=now, verbose_name='Дата оформления')
     status = models.CharField(max_length=20, choices=CartStatus.choices, default='pending', verbose_name='Статус заказа')
     issue_code = models.CharField(max_length=4, verbose_name='Код выдачи', default='0000')
     total_sum = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name='Сумма заказа')

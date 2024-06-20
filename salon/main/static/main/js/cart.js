@@ -56,19 +56,20 @@ function setAmount(productId, quantity) {
 
 function reserveCart() {
     let data = {};
-    let total = document.getElementById('total_price');
+    let total = document.getElementById('total_price').innerText.match(/\d+(\.\d+)?/)[0];
     let table = document.querySelector('.table tbody');
     table.querySelectorAll('tr').forEach(function(row) {
-        let id = row.cells[3].firstElementChild.id;
-        id = id.replace('quantity_', '');
-        data[id] = parseInt(row.cells[3].innerText);
+        let product = row.cells[3].getElementsByTagName('span')[0];
+        let id = product.id.replace('quantity_', '');
+        data[id] = parseInt(product.innerText);
     });
+    console.log(data);
     $.ajax({
         url: "/reserve/",
         type: "POST",
         data: {
             quantity: JSON.stringify(data),
-            sum: total.innerText
+            sum: total
         },
         dataType: "json",
         success: function (response) {
